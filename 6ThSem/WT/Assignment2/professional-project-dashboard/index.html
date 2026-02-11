@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Projects Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-slate: #2c3e50;
+            --emerald-green: #27ae60;
+            --soft-gainsboro: #f8f9fa;
+            --light-slate: #34495e;
+            --text-light: #ecf0f1;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            background-color: var(--soft-gainsboro);
+            font-family: 'Inter', sans-serif;
+            color: var(--deep-slate);
+        }
+
+        .navbar-custom {
+            background-color: var(--card-bg);
+            padding: 1rem 0;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .navbar-custom .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--light-slate);
+            font-weight: 500;
+            padding: 0.6rem 1.25rem;
+            margin: 0 0.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--deep-slate);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--deep-slate);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .project-card .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        .project-card .card-title {
+            color: var(--deep-slate);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .project-card .card-subtitle {
+            font-size: 0.95rem;
+            color: #6c757d;
+        }
+        
+        .project-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-section {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .card-section .icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            margin-top: 2px;
+            color: var(--light-slate);
+        }
+
+        .card-section-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            color: var(--deep-slate);
+        }
+        
+        .card-section-content {
+            font-size: 1rem;
+            color: #495057;
+        }
+        
+        .impact-metric {
+            color: var(--emerald-green);
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .tech-badge {
+            background-color: #e9ecef !important;
+            color: var(--deep-slate) !important;
+            font-weight: 500;
+            padding: 0.4em 0.8em;
+            font-size: 0.85rem;
+        }
+
+        .tab-content .tab-pane.fade {
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .page-header {
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            color: var(--deep-slate);
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: #6c757d;
+        }
+
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <nav class="navbar-custom">
+        <div class="container">
+            <ul class="nav nav-pills" id="projectTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="sdp-tab" data-bs-toggle="pill" data-bs-target="#sdp" type="button" role="tab" aria-controls="sdp" aria-selected="true">SDP</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="edi-tab" data-bs-toggle="pill" data-bs-target="#edi" type="button" role="tab" aria-controls="edi" aria-selected="false">EDI</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="dt-tab" data-bs-toggle="pill" data-bs-target="#dt" type="button" role="tab" aria-controls="dt" aria-selected="false">DT</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="course-tab" data-bs-toggle="pill" data-bs-target="#course" type="button" role="tab" aria-controls="course" aria-selected="false">Course Projects</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <header class="page-header mb-5">
+            <h1 class="display-5">Professional Projects Portfolio</h1>
+            <p class="lead">A Record of Professional Achievements & Technical Expertise</p>
+        </header>
+
+        <div class="tab-content" id="projectTabsContent">
+            <!-- SDP Tab -->
+            <div class="tab-pane fade show active" id="sdp" role="tabpanel" aria-labelledby="sdp-tab">
+                <div class="card project-card">
+                    <div class="card-header">
+                        <h4 class="card-title">Custom Honeypot for Multi-Protocol Threat Analysis</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">Software Development Project (2025)</h6>
+                    </div>
+                    <div class="card-body">
+                         <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Problem</h5>
+                                <p class="card-section-content">Rising sophisticated cyber-attacks and a critical lack of real-time intrusion data for proactive threat intelligence.</p>
+                            </div>
+                        </div>
+                        <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Solution</h5>
+                                <p class="card-section-content">Developed a custom, low-interaction honeypot capable of emulating multiple network protocols to safely attract, log, and analyze malicious activities.</p>
+                            </div>
+                        </div>
+                         <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                            <div>
+                                <h5 class="card-section-title">Key Impact</h5>
+                                <p class="card-section-content impact-metric">Captured 150+ unauthorized attempts from 30+ unique IPs, achieving a 93% detection accuracy for common intrusion patterns.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <h6 class="mb-2" style="font-weight: 500;">Key Technologies</h6>
+                        <span class="badge rounded-pill tech-badge">Python</span>
+                        <span class="badge rounded-pill tech-badge">Network Protocols</span>
+                        <span class="badge rounded-pill tech-badge">Cybersecurity</span>
+                        <span class="badge rounded-pill tech-badge">System Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDI Tab -->
+            <div class="tab-pane fade" id="edi" role="tabpanel" aria-labelledby="edi-tab">
+                 <div class="card project-card">
+                    <div class="card-header">
+                        <h4 class="card-title">MediaPipe Face Landmarker</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">Engineering Design & Innovation (2024)</h6>
+                    </div>
+                    <div class="card-body">
+                         <div class="mb-4 card-section">
+                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Problem</h5>
+                                <p class="card-section-content">High latency and low accuracy in real-time facial tracking for AR/Avatar applications, leading to a poor and broken user experience.</p>
+                            </div>
+                        </div>
+                        <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Solution</h5>
+                                <p class="card-section-content">Engineered a high-performance facial landmark detection system using Google's MediaPipe framework, optimized for real-time inference on web platforms.</p>
+                            </div>
+                        </div>
+                         <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                            <div>
+                                <h5 class="card-section-title">Key Impact</h5>
+                                <p class="card-section-content impact-metric">Achieved 95%+ tracking accuracy with sub-50ms inference latency, supporting 52 distinct blend-shape animation controls.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="card-footer bg-light">
+                        <h6 class="mb-2" style="font-weight: 500;">Key Technologies</h6>
+                        <span class="badge rounded-pill tech-badge">JavaScript</span>
+                        <span class="badge rounded-pill tech-badge">MediaPipe</span>
+                        <span class="badge rounded-pill tech-badge">Computer Vision</span>
+                        <span class="badge rounded-pill tech-badge">AR/VR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DT Tab -->
+            <div class="tab-pane fade" id="dt" role="tabpanel" aria-labelledby="dt-tab">
+                <div class="card project-card">
+                    <div class="card-header">
+                        <h4 class="card-title">CodeDebugger & Run</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">Design Thinking (2025)</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Problem</h5>
+                                <p class="card-section-content">Significant developer downtime caused by slow manual debugging processes and inherent security risks when executing untrusted code snippets locally.</p>
+                            </div>
+                        </div>
+                        <div class="mb-4 card-section">
+                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Solution</h5>
+                                <p class="card-section-content">Designed a debugging engine leveraging Abstract Syntax Trees (AST) for automated error identification, with a secure, isolated backend for sandboxed code execution.</p>
+                            </div>
+                        </div>
+                        <div class="mb-4 card-section">
+                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                           <div>
+                                <h5 class="card-section-title">Key Impact</h5>
+                                <p class="card-section-content impact-metric">Accelerated developer debugging workflows by 40% through enhanced trace analysis and automated reporting logic.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="card-footer bg-light">
+                        <h6 class="mb-2" style="font-weight: 500;">Key Technologies</h6>
+                        <span class="badge rounded-pill tech-badge">Python</span>
+                        <span class="badge rounded-pill tech-badge">FastAPI</span>
+                        <span class="badge rounded-pill tech-badge">Abstract Syntax Trees (AST)</span>
+                        <span class="badge rounded-pill tech-badge">Developer Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Projects Tab -->
+            <div class="tab-pane fade" id="course" role="tabpanel" aria-labelledby="course-tab">
+                <div class="card project-card">
+                    <div class="card-header">
+                        <h4 class="card-title">AURA — Data Visualization & Analytics Platform</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">Course Project (2025)</h6>
+                    </div>
+                    <div class="card-body">
+                         <div class="mb-4 card-section">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Problem</h5>
+                                <p class="card-section-content">Performance bottlenecks and static reporting when processing large-scale CSV datasets, hindering effective data-driven decision-making.</p>
+                            </div>
+                        </div>
+                        <div class="mb-4 card-section">
+                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div>
+                                <h5 class="card-section-title">The Solution</h5>
+                                <p class="card-section-content">Architected a full-stack data platform with optimized ETL pipelines, RESTful microservices, and intelligent caching to handle large-scale data ingestion and interactive visualization.</p>
+                            </div>
+                        </div>
+                         <div class="mb-4 card-section">
+                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                            <div>
+                                <h5 class="card-section-title">Key Impact</h5>
+                                <p class="card-section-content impact-metric">Boosted data pipeline throughput by 3x, enabling efficient processing of over 1,000 CSV datasets for real-time analytics.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <h6 class="mb-2" style="font-weight: 500;">Key Technologies</h6>
+                        <span class="badge rounded-pill tech-badge">Flask</span>
+                        <span class="badge rounded-pill tech-badge">Plotly</span>
+                        <span class="badge rounded-pill tech-badge">Data Pipelines (ETL)</span>
+                        <span class="badge rounded-pill tech-badge">Backend Integration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
