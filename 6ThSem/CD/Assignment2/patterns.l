@@ -27,7 +27,7 @@ void print_menu() {
 <VOWEL_STATE>^[a-z]*a[a-z]*e[a-z]*i[a-z]*o[a-z]*u[a-z]*$ { 
     printf("\n[RESULT] '%s': ACCEPTED (Vowels in order)\n", yytext); 
 }
-<VOWEL_STATE>^[a-z]+$ { 
+<VOWEL_STATE>^[a-z]+$ { o
     printf("\n[RESULT] '%s': REJECTED (Vowels missing or out of order)\n", yytext); 
 }
 
