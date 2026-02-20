@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Directory | Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-canvas: #f4f7fa;
+            --panel-bg: #ffffff;
+            --accent-gold: #b38b59;     /* Sophisticated Gold */
+            --accent-dark: #1a1c1e;     /* Deep Onyx */
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --row-hover: #fff9f0;       /* Warm light tint */
+            --border-subtle: #edf2f7;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 60px 20px;
+        }
+
+        .showcase-container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        /* Hero Header */
+        .page-header {
+            background: var(--accent-dark);
+            padding: 40px;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .page-header h2 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .page-header span {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        /* Table Card */
+        .content-card {
+            background: var(--panel-bg);
+            border-radius: 0 0 24px 24px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px; /* Space between rows */
+        }
+
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        td {
+            padding: 20px;
+            background: #ffffff;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+
+        /* Rounding the row corners */
+        td:first-child { border-left: 1px solid var(--border-subtle); border-radius: 12px 0 0 12px; }
+        td:last-child { border-right: 1px solid var(--border-subtle); border-radius: 0 12px 12px 0; }
+
+        tr:hover td {
+            background-color: var(--row-hover);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 139, 89, 0.1);
+        }
+
+        /* Custom Elements */
+        .id-label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .name-cell {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--accent-dark);
+        }
+
+        .info-group {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .course-pill {
+            background: var(--accent-dark);
+            color: var(--accent-gold);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Responsive UI */
+        @media (max-width: 768px) {
+            .page-header { flex-direction: column; text-align: center; gap: 10px; }
+            td { padding: 15px 10px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="showcase-container">
+    <header class="page-header">
+        <div>
+            <span>Verified Database</span>
+            <h2>Student Enrollment</h2>
+        </div>
+        <div style="color: white; font-size: 0.8rem; text-align: right;">
+            Records Found: <strong>{{ students|length }}</strong>
+        </div>
+    </header>
+
+    <div class="content-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll ID</th>
+                    <th>Student Identity</th>
+                    <th>Contact</th>
+                    <th>Program</th>
+                    <th>Residence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td><span class="id-label">#{{ student.roll_no }}</span></td>
+                    <td><div class="name-cell">{{ student.name }}</div></td>
+                    <td>
+                        <div class="info-group">
+                            {{ student.email }}<br>
+                            <strong>{{ student.mobile_number }}</strong>
+                        </div>
+                    </td>
+                    <td><span class="course-pill">{{ student.course }}</span></td>
+                    <td style="font-size: 0.9rem; color: var(--text-secondary);">
+                        {{ student.address }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 50px; color: var(--text-secondary);">
+                        The student directory is currently empty.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
