@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 %}
 
 DIGIT       [0-9]
@@ -50,8 +51,23 @@ HEXNUM      0x[0-9a-fA-F]+
 
 %%
 
-int main() {
+int main(int argc, char *argv[]) {
+    FILE *file;
+    const char *filename = "input.txt";
+    
+    if (argc > 1) {
+        filename = argv[1];
+    }
+    
+    file = fopen(filename, "r");
+    if (!file) {
+        fprintf(stderr, "Error: Cannot open file '%s'\n", filename);
+        return 1;
+    }
+    
+    yyin = file;
     yylex();
+    fclose(file);
     return 0;
 }
 

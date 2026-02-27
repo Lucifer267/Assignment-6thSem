@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Sort &amp; Merge Sort Visualizer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0f172a; color: #e2e8f0;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      padding: 2rem 1rem;
+    }
+    h1 { font-size: 1.8rem; margin-bottom: .25rem; color: #38bdf8; }
+    .subtitle { color: #94a3b8; margin-bottom: 1.5rem; font-size: .95rem; }
+
+    .controls {
+      display: flex; flex-wrap: wrap; gap: .75rem; align-items: center;
+      justify-content: center; margin-bottom: 1.5rem;
+    }
+    input, select, button {
+      font-size: .95rem; padding: .55rem 1rem; border-radius: .5rem;
+      border: 1px solid #334155; background: #1e293b; color: #e2e8f0;
+      outline: none; transition: border .2s;
+    }
+    input:focus, select:focus { border-color: #38bdf8; }
+    button {
+      cursor: pointer; font-weight: 600;
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      border: none; color: #fff;
+    }
+    button:hover { filter: brightness(1.1); }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-secondary { background: #334155; }
+    .btn-danger   { background: #ef4444; }
+
+    .speed-group { display: flex; align-items: center; gap: .4rem; }
+    .speed-group label { font-size: .85rem; color: #94a3b8; }
+    input[type=range] { width: 100px; accent-color: #38bdf8; background: transparent; }
+
+    .viz-container {
+      width: 100%; max-width: 900px; background: #1e293b;
+      border-radius: .75rem; padding: 1.5rem; margin-bottom: 1.25rem;
+      min-height: 320px; position: relative;
+    }
+    .bars-wrapper {
+      display: flex; align-items: flex-end; gap: 2px;
+      height: 260px; width: 100%;
+    }
+    .bar {
+      flex: 1; border-radius: 3px 3px 0 0;
+      transition: height .12s ease, background .12s ease;
+      position: relative; min-width: 4px;
+    }
+    .bar .val {
+      position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+      font-size: .65rem; color: #94a3b8; white-space: nowrap;
+    }
+    .bar          { background: #38bdf8; }
+    .bar.compare  { background: #facc15; }
+    .bar.swap     { background: #f43f5e; }
+    .bar.pivot    { background: #a78bfa; }
+    .bar.sorted   { background: #22c55e; }
+    .bar.inactive { background: #334155; }
+
+    .step-info {
+      text-align: center; margin-top: .75rem;
+      font-size: .9rem; color: #cbd5e1; min-height: 1.4em;
+    }
+
+    .stats {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: #1e293b; border-radius: .5rem; padding: .75rem 1.25rem;
+      text-align: center; min-width: 120px;
+    }
+    .stat-card .label { font-size: .75rem; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+    .stat-card .value { font-size: 1.25rem; font-weight: 700; color: #38bdf8; }
+
+    .complexity {
+      width: 100%; max-width: 900px; background: #1e293b;
+      border-radius: .75rem; padding: 1.5rem; margin-top: .5rem;
+    }
+    .complexity h2 { font-size: 1.15rem; margin-bottom: .75rem; color: #a78bfa; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { padding: .6rem .75rem; text-align: center; border-bottom: 1px solid #334155; }
+    th { color: #94a3b8; font-weight: 600; }
+    td { color: #e2e8f0; }
+    tr:last-child td { border-bottom: none; }
+
+    .legend { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1rem; font-size: .8rem; }
+    .legend-item { display: flex; align-items: center; gap: .35rem; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+    .mem-note {
+      width: 100%; max-width: 900px; background: #1e293b;
+      border-radius: .75rem; padding: 1.25rem 1.5rem; margin-top: .75rem;
+      font-size: .82rem; color: #94a3b8; line-height: 1.55;
+    }
+    .mem-note h3 { color: #22c55e; margin-bottom: .4rem; font-size: .95rem; }
+    .mem-note code { color: #facc15; background: #334155; padding: .1rem .3rem; border-radius: 3px; font-size: .8rem; }
+
+    @media (max-width: 600px) {
+      .bars-wrapper { height: 180px; }
+      .controls { gap: .5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Quick Sort &amp; Merge Sort Visualizer</h1>
+  <p class="subtitle">Memory-efficient delta-based visualization — no full array copies</p>
+
+  <div class="controls">
+    <input id="arrayInput" type="text" placeholder="e.g. 38, 27, 43, 3, 9, 82, 10" style="width:280px;" />
+    <input id="sizeInput" type="number" value="20" min="2" max="80" style="width:70px;" title="Random size" />
+    <button id="btnRandom" class="btn-secondary" title="Generate random array">🎲 Random</button>
+    <select id="algoSelect">
+      <option value="merge">Merge Sort</option>
+      <option value="quick">Quick Sort</option>
+    </select>
+    <button id="btnSort">▶ Sort</button>
+    <button id="btnPause" disabled>⏸ Pause</button>
+    <button id="btnReset" class="btn-danger" disabled>↺ Reset</button>
+    <div class="speed-group">
+      <label>Speed</label>
+      <input id="speedRange" type="range" min="1" max="200" value="50" />
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-swatch" style="background:#38bdf8"></span> Default</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:#facc15"></span> Comparing</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:#f43f5e"></span> Swap</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:#a78bfa"></span> Pivot</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:#22c55e"></span> Sorted / Merged</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:#334155"></span> Inactive</span>
+  </div>
+
+  <div class="viz-container">
+    <div class="bars-wrapper" id="barsWrapper"></div>
+    <div class="step-info" id="stepInfo">Press <strong>Sort</strong> to begin</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="label">Algorithm</div><div class="value" id="statAlgo">—</div></div>
+    <div class="stat-card"><div class="label">Elements</div><div class="value" id="statN">—</div></div>
+    <div class="stat-card"><div class="label">Ops</div><div class="value" id="statSteps">—</div></div>
+    <div class="stat-card"><div class="label">Viz Time</div><div class="value" id="statTime">—</div></div>
+  </div>
+
+<script>
+/* ──────────────────────────────────────────────
+   DOM refs & state
+   ────────────────────────────────────────────── */
+const barsWrapper = document.getElementById('barsWrapper');
+const stepInfo    = document.getElementById('stepInfo');
+const arrayInput  = document.getElementById('arrayInput');
+const sizeInput   = document.getElementById('sizeInput');
+const algoSelect  = document.getElementById('algoSelect');
+const speedRange  = document.getElementById('speedRange');
+const btnSort     = document.getElementById('btnSort');
+const btnPause    = document.getElementById('btnPause');
+const btnReset    = document.getElementById('btnReset');
+const btnRandom   = document.getElementById('btnRandom');
+
+let ops = [];
+let opIdx = 0;
+let arr = [];           // live array state, mutated in-place by ops
+let playing = false;
+let paused  = false;
+let originalArray = [];
+let barEls = [];        // recycled DOM elements
+
+/* ──────────────────────────────────────────────
+   Helpers
+   ────────────────────────────────────────────── */
+const delay = () => Math.max(5, 520 - speedRange.value * 2.6);
+const randArr = n => Array.from({ length: n }, () => Math.floor(Math.random() * 99) + 1);
+
+function getArray() {
+  const raw = arrayInput.value.trim();
+  if (raw) return raw.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+  return randArr(+sizeInput.value || 20);
+}
+
+/* ──────────────────────────────────────────────
+   DOM-recycling bar renderer
+   Reuses existing <div> elements — only creates/removes
+   when the element count changes.
+   ────────────────────────────────────────────── */
+function ensureBars(n) {
+  while (barEls.length < n) {
+    const el = document.createElement('div');
+    el.className = 'bar';
+    const val = document.createElement('span');
+    val.className = 'val';
+    el.appendChild(val);
+    barsWrapper.appendChild(el);
+    barEls.push(el);
+  }
+  while (barEls.length > n) {
+    barsWrapper.removeChild(barEls.pop());
+  }
+}
+
+function paintBars(highlights) {
+  /* highlights: { compare: Set, swap: Set, pivot: Set, merged: Set, range: [lo,hi]|null, done: bool } */
+  const maxVal = Math.max(...arr);
+  const showVal = arr.length <= 40;
+
+  ensureBars(arr.length);
+  for (let i = 0; i < arr.length; i++) {
+    const el = barEls[i];
+    el.style.height = `${(arr[i] / maxVal) * 100}%`;
+
+    // Reset classes efficiently (avoid className = 'bar' which triggers layout)
+    el.classList.remove('compare', 'swap', 'pivot', 'sorted', 'inactive');
+
+    if (highlights.done) {
+      el.classList.add('sorted');
+    } else if (highlights.range && (i < highlights.range[0] || i > highlights.range[1])) {
+      el.classList.add('inactive');
+    } else if (highlights.swap && highlights.swap.has(i)) {
+      el.classList.add('swap');
+    } else if (highlights.compare && highlights.compare.has(i)) {
+      el.classList.add('compare');
+    } else if (highlights.pivot && highlights.pivot.has(i)) {
+      el.classList.add('pivot');
+    } else if (highlights.merged && highlights.merged.has(i)) {
+      el.classList.add('sorted');
+    }
+
+    // Value label
+    const valEl = el.firstChild;
+    if (showVal) { valEl.textContent = arr[i]; valEl.style.display = ''; }
+    else { valEl.style.display = 'none'; }
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Apply one op — mutates `arr` and paints
+   ────────────────────────────────────────────── */
+const OP_LABELS = {
+  d: 'Divide', c: 'Compare', s: 'Swap', w: 'Write',
+  m: 'Merged', p: 'Pivot selected', P: 'Pivot placed', D: 'Done ✓'
+};
+
+function applyOp(op) {
+  const code = op[0];
+  const hl = { compare: null, swap: null, pivot: null, merged: null, range: null, done: false };
+  let desc = '';
+
+  switch (code) {
+    case 'd': {                          // ["d", lo, hi, mid]
+      const [, lo, hi, mid] = op;
+      hl.range = [lo, hi];
+      desc = `Divide [${lo}..${hi}] at mid=${mid}`;
+      break;
+    }
+    case 'c': {                          // ["c", i, j, lo, hi]
+      const [, i, j, lo, hi] = op;
+      hl.compare = new Set([i, j]);
+      hl.range = [lo, hi];
+      desc = `Compare arr[${i}]=${arr[i]} with arr[${j}]=${arr[j]}`;
+      break;
+    }
+    case 's': {                          // ["s", i, j, lo, hi]
+      const [, i, j, lo, hi] = op;
+      // mutate live array
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      hl.swap = new Set([i, j]);
+      hl.range = [lo, hi];
+      desc = `Swap arr[${i}] ↔ arr[${j}]`;
+      break;
+    }
+    case 'w': {                          // ["w", idx, val, lo, hi]
+      const [, idx, val, lo, hi] = op;
+      arr[idx] = val;
+      hl.swap = new Set([idx]);           // highlight the write position
+      hl.range = [lo, hi];
+      desc = `Write arr[${idx}] = ${val}`;
+      break;
+    }
+    case 'm': {                          // ["m", lo, hi]
+      const [, lo, hi] = op;
+      hl.merged = new Set();
+      for (let k = lo; k <= hi; k++) hl.merged.add(k);
+      hl.range = [lo, hi];
+      desc = `Merged [${lo}..${hi}]`;
+      break;
+    }
+    case 'p': {                          // ["p", pivotIdx, lo, hi]
+      const [, pIdx, lo, hi] = op;
+      hl.pivot = new Set([pIdx]);
+      hl.range = [lo, hi];
+      desc = `Pivot = ${arr[pIdx]} (index ${pIdx})`;
+      break;
+    }
+    case 'P': {                          // ["P", pivotIdx, lo, hi]
+      const [, pIdx, lo, hi] = op;
+      hl.pivot = new Set([pIdx]);
+      hl.range = [lo, hi];
+      desc = `Pivot ${arr[pIdx]} placed at index ${pIdx}`;
+      break;
+    }
+    case 'D': {
+      hl.done = true;
+      desc = 'Sorting complete ✓';
+      break;
+    }
+  }
+
+  paintBars(hl);
+  document.getElementById('statSteps').textContent = opIdx + 1;  // live counter
+  stepInfo.innerHTML = `<strong>Op ${opIdx + 1}</strong> · ${OP_LABELS[code] || code} — ${desc}`;
+}
+
+/* ──────────────────────────────────────────────
+   Playback
+   ────────────────────────────────────────────── */
+let vizStartTime = 0;
+let vizTimerId = null;
+
+function startVizTimer() {
+  vizStartTime = performance.now();
+  const statTime = document.getElementById('statTime');
+  // Update the timer live every 50ms so the user sees it ticking
+  vizTimerId = setInterval(() => {
+    statTime.textContent = ((performance.now() - vizStartTime) / 1000).toFixed(2) + 's';
+  }, 50);
+}
+
+function stopVizTimer() {
+  clearInterval(vizTimerId);
+  vizTimerId = null;
+  const elapsed = ((performance.now() - vizStartTime) / 1000).toFixed(2);
+  document.getElementById('statTime').textContent = elapsed + 's';
+}
+
+async function play() {
+  playing = true; paused = false;
+  btnSort.disabled = true;
+  btnPause.disabled = false;
+  btnReset.disabled = false;
+  btnPause.textContent = '⏸ Pause';
+
+  startVizTimer();
+
+  while (opIdx < ops.length && playing) {
+    if (paused) { await new Promise(r => setTimeout(r, 80)); continue; }
+    applyOp(ops[opIdx]);
+    opIdx++;
+    await new Promise(r => setTimeout(r, delay()));
+  }
+
+  stopVizTimer();
+
+  if (opIdx >= ops.length) {
+    playing = false;
+    btnSort.disabled = false;
+    btnPause.disabled = true;
+    stepInfo.innerHTML = '<strong>✅ Sorting complete!</strong>';
+  }
+}
+
+function pause() {
+  if (!playing) return;
+  paused = !paused;
+  btnPause.textContent = paused ? '▶ Resume' : '⏸ Pause';
+}
+
+function reset() {
+  playing = false; paused = false; opIdx = 0;
+  ops = [];
+  btnSort.disabled = false;
+  btnPause.disabled = true;
+  btnReset.disabled = true;
+  if (originalArray.length) {
+    arr = [...originalArray];
+    paintBars({ done: false, range: null });
+    stepInfo.innerHTML = 'Press <strong>Sort</strong> to begin';
+  } else {
+    barEls.forEach(el => barsWrapper.removeChild(el));
+    barEls = [];
+    stepInfo.innerHTML = 'Press <strong>Sort</strong> to begin';
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Fetch ops from backend & start
+   ────────────────────────────────────────────── */
+async function startSort() {
+  const input = getArray();
+  if (input.length < 2) { alert('Need at least 2 numbers! Enter comma-separated values.'); return; }
+  originalArray = [...input];
+  arr = [...input];                         // working copy for incremental mutation
+  arrayInput.value = input.join(', ');
+  sizeInput.value = input.length;           // sync size field with actual array length
+
+  const algo = algoSelect.value;
+  btnSort.disabled = true;
+  stepInfo.innerHTML = 'Computing ops…';
+
+  // Pre-render initial state
+  paintBars({ done: false, range: null });
+
+  try {
+    const res = await fetch('/sort', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ array: input, algorithm: algo })
+    });
+    if (!res.ok) throw new Error(`Server responded ${res.status} ${res.statusText}`);
+    const data = await res.json();
+    if (!data.ops || !Array.isArray(data.ops)) throw new Error('Invalid response — is the server running?');
+
+    ops = data.ops;
+    opIdx = 0;
+    arr = [...originalArray];               // reset to initial before replay
+
+    document.getElementById('statAlgo').textContent  = algo === 'merge' ? 'Merge' : 'Quick';
+    document.getElementById('statN').textContent      = data.n;
+    document.getElementById('statSteps').textContent  = '0';    // starts at 0, incremented live
+    document.getElementById('statTime').textContent   = '—';  // will be set by live viz timer
+
+    play();
+  } catch (e) {
+    alert('Error: ' + e.message);
+    stepInfo.innerHTML = '<strong style="color:#f43f5e">Failed — make sure the server is running (python User.py)</strong>';
+    btnSort.disabled = false;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Event listeners
+   ────────────────────────────────────────────── */
+btnSort.addEventListener('click', () => { reset(); startSort(); });
+btnPause.addEventListener('click', pause);
+btnReset.addEventListener('click', reset);
+btnRandom.addEventListener('click', () => {
+  const a = randArr(+sizeInput.value || 20);
+  arrayInput.value = a.join(', ');
+  originalArray = a;
+  arr = [...a];
+  ops = []; opIdx = 0;
+  btnSort.disabled = false;
+  btnPause.disabled = true;
+  btnReset.disabled = true;
+  paintBars({ done: false, range: null });
+  stepInfo.innerHTML = `Random array of <strong>${a.length}</strong> elements — press <strong>Sort</strong>`;
+});
+
+/* Live preview: re-render bars as the user types a custom array */
+arrayInput.addEventListener('input', () => {
+  const raw = arrayInput.value.trim();
+  if (!raw) return;
+  const parsed = raw.split(/[\s,]+/).map(Number).filter(n => !isNaN(n) && n > 0);
+  if (parsed.length < 1) return;
+  originalArray = parsed;
+  arr = [...parsed];
+  sizeInput.value = parsed.length;          // keep size field in sync
+  paintBars({ done: false, range: null });
+  stepInfo.innerHTML = `Custom array: <strong>${parsed.length}</strong> elements — press <strong>Sort</strong>`;
+});
+
+window.addEventListener('DOMContentLoaded', () => btnRandom.click());
+</script>
+</body>
+</html>
