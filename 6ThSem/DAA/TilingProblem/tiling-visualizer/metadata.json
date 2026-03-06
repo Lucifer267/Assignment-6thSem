@@ -1,0 +1,5 @@
+{
+  "name": "Tromino Tiling Visualizer",
+  "description": "Interactive visualization of the Divide and Conquer Tromino Tiling algorithm.",
+  "requestFramePermissions": []
+}

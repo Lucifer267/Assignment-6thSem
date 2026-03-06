@@ -40,7 +40,7 @@ export default function Admin() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const url = editingBook ? `/api/books/${editingBook.book_id}` : "/api/books";
     const method = editingBook ? "PUT" : "POST";
@@ -234,7 +234,7 @@ export default function Admin() {
                     type="text"
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                     value={formData.title}
-                    onChange={e => setFormData({...formData, title: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, title: e.target.value})}
                     placeholder="e.g. The Great Gatsby"
                   />
                 </div>
@@ -248,7 +248,7 @@ export default function Admin() {
                     type="text"
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                     value={formData.author}
-                    onChange={e => setFormData({...formData, author: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, author: e.target.value})}
                     placeholder="e.g. F. Scott Fitzgerald"
                   />
                 </div>
@@ -265,7 +265,7 @@ export default function Admin() {
                       step="0.01"
                       className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                       value={formData.price}
-                      onChange={e => setFormData({...formData, price: parseFloat(e.target.value)})}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, price: parseFloat(e.target.value)})}
                     />
                   </div>
                 </div>

@@ -1,5 +1,0 @@
-
-{
-  "name": "Array Operations Visualizer",
-  "description": "A web application to visualize common array operations like reversing, sorting (Bubble, Merge), and searching, implemented in JavaScript without using built-in functions."
-}
