@@ -1,0 +1,134 @@
+/* Employee Management System — Teal/Emerald Theme */
+
+/* ── Bootstrap primary palette override (no blue anywhere) ── */
+:root {
+  --bs-primary:                 #0f766e;
+  --bs-primary-rgb:             15, 118, 110;
+  --bs-primary-text-emphasis:   #064e3b;
+  --bs-primary-bg-subtle:       #ccfbf1;
+  --bs-primary-border-subtle:   #99f6e4;
+  --bs-link-color:              #0f766e;
+  --bs-link-hover-color:        #065f46;
+  --bs-focus-ring-color:        rgba(15, 118, 110, 0.25);
+}
+
+/* btn-primary */
+.btn-primary {
+  --bs-btn-bg:                  #0f766e;
+  --bs-btn-border-color:        #0f766e;
+  --bs-btn-hover-bg:            #0c5e57;
+  --bs-btn-hover-border-color:  #0c5e57;
+  --bs-btn-active-bg:           #0a4d47;
+  --bs-btn-active-border-color: #0a4d47;
+  --bs-btn-disabled-bg:         #0f766e;
+  --bs-btn-disabled-border-color: #0f766e;
+  --bs-btn-focus-shadow-rgb:    15, 118, 110;
+}
+
+/* btn-outline-primary */
+.btn-outline-primary {
+  --bs-btn-color:               #0f766e;
+  --bs-btn-border-color:        #0f766e;
+  --bs-btn-hover-bg:            #0f766e;
+  --bs-btn-hover-border-color:  #0f766e;
+  --bs-btn-active-bg:           #0f766e;
+  --bs-btn-active-border-color: #0f766e;
+}
+
+/* Bootstrap utility overrides */
+.bg-primary        { background-color: #0f766e !important; }
+.text-primary      { color:            #0f766e !important; }
+.border-primary    { border-color:     #0f766e !important; }
+.bg-primary-subtle { background-color: #ccfbf1 !important; }
+.text-primary-emphasis { color:        #064e3b !important; }
+
+/* Replace cyan info buttons with teal-outline */
+.btn-outline-info {
+  --bs-btn-color:               #0f766e;
+  --bs-btn-border-color:        #0f766e;
+  --bs-btn-hover-bg:            #0f766e;
+  --bs-btn-hover-border-color:  #0f766e;
+  --bs-btn-hover-color:         #fff;
+  --bs-btn-active-bg:           #0c5e57;
+  --bs-btn-active-border-color: #0c5e57;
+  --bs-btn-active-color:        #fff;
+}
+
+/* ── Layout ── */
+body {
+  background-color: #f0faf8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(135deg, #0f766e, #065f46) !important;
+}
+.navbar-brand {
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+}
+
+/* Stat cards */
+.stat-card {
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+/* Tables */
+.table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c757d;
+}
+.table-hover tbody tr:hover {
+  background-color: #d1fae5;
+}
+
+/* Cards */
+.card {
+  border-radius: 12px;
+}
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+}
+
+/* Form controls */
+.form-control:focus,
+.form-select:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.18);
+}
+
+/* Checkbox accent */
+.form-check-input:checked {
+  background-color: #0f766e;
+  border-color: #0f766e;
+}
+
+/* Links */
+a {
+  color: #0f766e;
+}
+a:hover {
+  color: #065f46;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+}
+
+/* Footer */
+footer {
+  font-size: 0.85rem;
+}

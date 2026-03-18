@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee Directory{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold"><i class="bi bi-people-fill me-2" style="color:#0f766e"></i>Employee Directory</h2>
+  <a href="{% url 'employee_create' %}" class="btn btn-primary">
+    <i class="bi bi-person-plus me-1"></i>Add Employee
+  </a>
+</div>
+
+<!-- Stats cards -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center stat-card">
+      <div class="card-body">
+        <div class="stat-icon" style="color:#0f766e"><i class="bi bi-people"></i></div>
+        <h3 class="fw-bold">{{ total }}</h3>
+        <p class="text-muted mb-0">Total Employees</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center stat-card">
+      <div class="card-body">
+        <div class="stat-icon text-success"><i class="bi bi-person-check"></i></div>
+        <h3 class="fw-bold">{{ active }}</h3>
+        <p class="text-muted mb-0">Active</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search & Filter -->
+<div class="card shadow-sm mb-4 border-0">
+  <div class="card-body">
+    <form method="GET" class="row g-2 align-items-end">
+      <div class="col-md-6">
+        <label class="form-label text-muted small">Search</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+          <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Name or email..." />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label text-muted small">Department</label>
+        <select name="department" class="form-select">
+          <option value="">All Departments</option>
+          <option value="HR" {% if selected_dept == 'HR' %}selected{% endif %}>Human Resources</option>
+          <option value="IT" {% if selected_dept == 'IT' %}selected{% endif %}>Information Technology</option>
+          <option value="FIN" {% if selected_dept == 'FIN' %}selected{% endif %}>Finance</option>
+          <option value="MKT" {% if selected_dept == 'MKT' %}selected{% endif %}>Marketing</option>
+          <option value="OPS" {% if selected_dept == 'OPS' %}selected{% endif %}>Operations</option>
+          <option value="SALES" {% if selected_dept == 'SALES' %}selected{% endif %}>Sales</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+        <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary w-100">Clear</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Employee Table -->
+{% if employees %}
+<div class="card shadow-sm border-0">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for emp in employees %}
+          <tr>
+            <td class="text-muted">{{ forloop.counter }}</td>
+            <td>
+              <div class="fw-semibold">{{ emp.get_full_name }}</div>
+              <small class="text-muted">{{ emp.phone }}</small>
+            </td>
+            <td><a href="mailto:{{ emp.email }}" class="text-decoration-none">{{ emp.email }}</a></td>
+            <td><span class="badge bg-primary-subtle text-primary-emphasis">{{ emp.get_department_display }}</span></td>
+            <td>{{ emp.position }}</td>
+            <td>
+              {% if emp.is_active %}
+                <span class="badge bg-success-subtle text-success"><i class="bi bi-circle-fill small me-1"></i>Active</span>
+              {% else %}
+                <span class="badge bg-secondary-subtle text-secondary"><i class="bi bi-circle small me-1"></i>Inactive</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'employee_detail' emp.pk %}" class="btn btn-sm btn-outline-info" title="View"><i class="bi bi-eye"></i></a>
+              <a href="{% url 'employee_update' emp.pk %}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil"></i></a>
+              <a href="{% url 'employee_delete' emp.pk %}" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="text-center py-5">
+  <i class="bi bi-person-slash display-1 text-muted"></i>
+  <p class="mt-3 text-muted fs-5">No employees found.</p>
+  <a href="{% url 'employee_create' %}" class="btn btn-primary mt-2">Add First Employee</a>
+</div>
+{% endif %}
+{% endblock %}
