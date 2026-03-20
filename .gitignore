@@ -6,6 +6,10 @@ yarn-error.log*
 # Build
 dist/
 build/
+*.yy.c
+y.tab.c
+y.tab.h
+lex.yy.c
 
 # Env
 .env
@@ -14,3 +18,7 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Dependencies
+.venv/
+venv/
