@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📖 Documentation</h1>
+            <p>Complete guide for Student Management System</p>
+        </header>
+
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="view_students.php" class="nav-link">View All Students</a>
+            <a href="add_student.php" class="nav-link">Add New Student</a>
+            <a href="db_setup.php" class="nav-link">Database Setup</a>
+            <a href="documentation.html" class="nav-link active">Documentation</a>
+        </nav>
+
+        <main class="main-content">
+            <!-- Table of Contents -->
+            <section class="toc-section">
+                <h2>Table of Contents</h2>
+                <ul class="toc-list">
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#requirements">Requirements</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#database">Database Structure</a></li>
+                    <li><a href="#crud">CRUD Operations</a></li>
+                    <li><a href="#connection">Connection Methods</a></li>
+                    <li><a href="#security">Security Features</a></li>
+                    <li><a href="#files">File Structure</a></li>
+                </ul>
+            </section>
+
+            <!-- Overview -->
+            <section id="overview" class="doc-section">
+                <h2>Overview</h2>
+                <p>The Student Management System is a web application that demonstrates complete database operations using PHP and MySQL. It implements the CRUD (Create, Read, Update, Delete) pattern with proper validation and security measures.</p>
+                
+                <div class="feature-list">
+                    <h3>Key Features:</h3>
+                    <ul>
+                        <li>Database and table creation wizard</li>
+                        <li>Add new student records</li>
+                        <li>View all student records</li>
+                        <li>Edit/update student information</li>
+                        <li>Delete student records</li>
+                        <li>Input validation and error handling</li>
+                        <li>Prepared statements for security</li>
+                        <li>Responsive design</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Requirements -->
+            <section id="requirements" class="doc-section">
+                <h2>Requirements</h2>
+                
+                <div class="requirement-group">
+                    <h3>Server Requirements:</h3>
+                    <ul>
+                        <li>PHP 7.0 or higher</li>
+                        <li>MySQL 5.7 or higher</li>
+                        <li>PHP MySQLi extension enabled</li>
+                        <li>Web server (Apache, Nginx, etc.)</li>
+                    </ul>
+                </div>
+
+                <div class="requirement-group">
+                    <h3>Client Requirements:</h3>
+                    <ul>
+                        <li>Modern web browser</li>
+                        <li>JavaScript enabled (optional)</li>
+                        <li>Cookies enabled for session handling</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Installation -->
+            <section id="installation" class="doc-section">
+                <h2>Installation & Setup</h2>
+                
+                <div class="step-by-step">
+                    <h3>Step 1: Prepare MySQL</h3>
+                    <ul>
+                        <li>Start MySQL server</li>
+                        <li>Ensure default user 'root' is available</li>
+                        <li>Default password is empty (or update config.php)</li>
+                    </ul>
+                </div>
+
+                <div class="step-by-step">
+                    <h3>Step 2: Upload Files</h3>
+                    <ul>
+                        <li>Copy all files to web server directory</li>
+                        <li>Ensure proper file permissions</li>
+                        <li>.php files must be executable</li>
+                    </ul>
+                </div>
+
+                <div class="step-by-step">
+                    <h3>Step 3: Configure Database</h3>
+                    <ul>
+                        <li>Open <code>config.php</code></li>
+                        <li>Update DB_SERVER, DB_USER, DB_PASSWORD as needed</li>
+                        <li>Database name is automatically created</li>
+                    </ul>
+                </div>
+
+                <div class="step-by-step">
+                    <h3>Step 4: Initialize Database</h3>
+                    <ul>
+                        <li>Go to "Database Setup" page</li>
+                        <li>Click "Create Database & Table"</li>
+                        <li>Optionally insert sample data</li>
+                    </ul>
+                </div>
+
+                <div class="step-by-step">
+                    <h3>Step 5: Start Using</h3>
+                    <ul>
+                        <li>Navigate to View/Add/Edit/Delete pages</li>
+                        <li>Manage student records</li>
+                        <li>Monitor database operations</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Database -->
+            <section id="database" class="doc-section">
+                <h2>Database Structure</h2>
+                
+                <div class="db-info">
+                    <h3>Database Name: student_db</h3>
+                    <h4>Table: students</h4>
+                    
+                    <table class="schema-table">
+                        <tr>
+                            <th>Column</th>
+                            <th>Type</th>
+                            <th>Constraints</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><strong>id</strong></td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>Unique student identifier (1, 2, 3, ...)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>name</strong></td>
+                            <td>VARCHAR(100)</td>
+                            <td>NOT NULL</td>
+                            <td>Student's full name</td>
+                        </tr>
+                        <tr>
+                            <td><strong>email</strong></td>
+                            <td>VARCHAR(100)</td>
+                            <td>UNIQUE, NOT NULL</td>
+                            <td>Student's unique email address</td>
+                        </tr>
+                        <tr>
+                            <td><strong>created_at</strong></td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP</td>
+                            <td>Record creation datetime</td>
+                        </tr>
+                        <tr>
+                            <td><strong>updated_at</strong></td>
+                            <td>TIMESTAMP</td>
+                            <td>AUTO UPDATE CURRENT_TIMESTAMP</td>
+                            <td>Record last modification datetime</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="sql-create">
+                    <h3>CREATE TABLE SQL:</h3>
+                    <div class="code-block">
+                        <pre>
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CRUD Operations -->
+            <section id="crud" class="doc-section">
+                <h2>CRUD Operations</h2>
+
+                <div class="crud-operation">
+                    <h3>1. CREATE (Insert)</h3>
+                    <p><strong>Page:</strong> add_student.php</p>
+                    <div class="code-block">
+                        <pre>
+INSERT INTO students (name, email) 
+VALUES ('John Doe', 'john@example.com');
+                        </pre>
+                    </div>
+                    <div class="crud-details">
+                        <p><strong>PHP Implementation (Prepared Statement):</strong></p>
+                        <div class="code-block">
+                            <pre>
+$stmt = $conn->prepare("INSERT INTO students (name, email) VALUES (?, ?)");
+$stmt->bind_param("ss", $name, $email);
+$stmt->execute();
+$new_id = $stmt->insert_id;
+                            </pre>
+                        </div>
+                        <p><strong>Key Points:</strong></p>
+                        <ul>
+                            <li>Prepared statement prevents SQL injection</li>
+                            <li>Parameterized query with ? placeholders</li>
+                            <li>bind_param() binds variables to parameters</li>
+                            <li>insert_id returns the auto-generated ID</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="crud-operation">
+                    <h3>2. READ (Select)</h3>
+                    <p><strong>Page:</strong> view_students.php</p>
+                    <div class="code-block">
+                        <pre>
+SELECT id, name, email, created_at, updated_at 
+FROM students 
+ORDER BY id DESC;
+                        </pre>
+                    </div>
+                    <div class="crud-details">
+                        <p><strong>PHP Implementation:</strong></p>
+                        <div class="code-block">
+                            <pre>
+$result = $conn->query("SELECT * FROM students ORDER BY id DESC");
+while ($row = $result->fetch_assoc()) {
+    echo $row['id'] . " - " . $row['name'] . " - " . $row['email'];
+}
+                            </pre>
+                        </div>
+                        <p><strong>Key Points:</strong></p>
+                        <ul>
+                            <li>Simple SELECT query for displaying data</li>
+                            <li>fetch_assoc() retrieves associative array</li>
+                            <li>ORDER BY sorts records</li>
+                            <li>No parameters needed for read-only queries</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="crud-operation">
+                    <h3>3. UPDATE (Modify)</h3>
+                    <p><strong>Page:</strong> edit_student.php</p>
+                    <div class="code-block">
+                        <pre>
+UPDATE students 
+SET name = 'Jane Doe', email = 'jane@example.com' 
+WHERE id = 1;
+                        </pre>
+                    </div>
+                    <div class="crud-details">
+                        <p><strong>PHP Implementation (Prepared Statement):</strong></p>
+                        <div class="code-block">
+                            <pre>
+$stmt = $conn->prepare("UPDATE students SET name = ?, email = ? WHERE id = ?");
+$stmt->bind_param("ssi", $name, $email, $id);
+$stmt->execute();
+$affected = $stmt->affected_rows;
+                            </pre>
+                        </div>
+                        <p><strong>Key Points:</strong></p>
+                        <ul>
+                            <li>Must have WHERE clause to specify which record to update</li>
+                            <li>Prepared statement for security</li>
+                            <li>affected_rows shows number of updated records</li>
+                            <li>Binding parameters: "ssi" = string, string, integer</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="crud-operation">
+                    <h3>4. DELETE (Remove)</h3>
+                    <p><strong>Page:</strong> view_students.php (with action parameter)</p>
+                    <div class="code-block">
+                        <pre>
+DELETE FROM students 
+WHERE id = 1;
+                        </pre>
+                    </div>
+                    <div class="crud-details">
+                        <p><strong>PHP Implementation (Prepared Statement):</strong></p>
+                        <div class="code-block">
+                            <pre>
+$stmt = $conn->prepare("DELETE FROM students WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+if ($stmt->affected_rows > 0) {
+    echo "Record deleted";
+}
+                            </pre>
+                        </div>
+                        <p><strong>Key Points:</strong></p>
+                        <ul>
+                            <li>Must have WHERE clause (prevents accidental deletion of all records)</li>
+                            <li>Confirmation dialog recommended</li>
+                            <li>affected_rows confirms deletion</li>
+                            <li>Prepared statement prevents SQL injection</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Connection Methods -->
+            <section id="connection" class="doc-section">
+                <h2>Database Connection Methods</h2>
+
+                <div class="connection-method">
+                    <h3>Method 1: MySQLi (Object-Oriented) - Used in this project</h3>
+                    <div class="code-block">
+                        <pre>
+&lt;?php
+$conn = new mysqli('localhost', 'root', '', 'student_db');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Execute query
+$result = $conn->query("SELECT * FROM students");
+
+// Close connection
+$conn->close();
+?&gt;
+                        </pre>
+                    </div>
+                    <div class="pros-cons">
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Object-oriented approach</li>
+                            <li>Supports prepared statements</li>
+                            <li>Better security</li>
+                            <li>More control over database operations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="connection-method">
+                    <h3>Method 2: MySQLi (Procedural)</h3>
+                    <div class="code-block">
+                        <pre>
+&lt;?php
+$conn = mysqli_connect('localhost', 'root', '', 'student_db');
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$result = mysqli_query($conn, "SELECT * FROM students");
+mysqli_close($conn);
+?&gt;
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="connection-method">
+                    <h3>Method 3: PDO (PHP Data Objects)</h3>
+                    <div class="code-block">
+                        <pre>
+&lt;?php
+try {
+    $pdo = new PDO(
+        'mysql:host=localhost;dbname=student_db',
+        'root',
+        ''
+    );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Connection Error: " . $e->getMessage());
+}
+?&gt;
+                        </pre>
+                    </div>
+                    <div class="pros-cons">
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Works with multiple database systems</li>
+                            <li>Similar syntax across databases</li>
+                            <li>Exception-based error handling</li>
+                            <li>Prepared statements support</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security -->
+            <section id="security" class="doc-section">
+                <h2>Security Features</h2>
+
+                <div class="security-feature">
+                    <h3>1. Prepared Statements</h3>
+                    <p>Prevents SQL injection attacks by separating SQL code from data:</p>
+                    <div class="code-block">
+                        <pre>
+// SAFE - Using prepared statement
+$stmt = $conn->prepare("INSERT INTO students (name, email) VALUES (?, ?)");
+$stmt->bind_param("ss", $name, $email);
+
+// UNSAFE - String concatenation (vulnerable)
+$sql = "INSERT INTO students VALUES ('$name', '$email')";
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="security-feature">
+                    <h3>2. Input Validation</h3>
+                    <p>Validates user input before database operations:</p>
+                    <ul>
+                        <li>Name: Check length, allow only letters and spaces</li>
+                        <li>Email: Validate format using filter_var()</li>
+                        <li>ID: Convert to integer (only numbers)</li>
+                    </ul>
+                </div>
+
+                <div class="security-feature">
+                    <h3>3. Output Escaping</h3>
+                    <p>Prevents XSS attacks by escaping displayed data:</p>
+                    <div class="code-block">
+                        <pre>
+// SAFE - Escape HTML special characters
+&lt;?php echo htmlspecialchars($student['name']); ?&gt;
+
+// UNSAFE - Direct echo
+&lt;?php echo $student['name']; ?&gt;
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="security-feature">
+                    <h3>4. Confirmation Dialogs</h3>
+                    <p>Prevent accidental deletion of records with confirmation:</p>
+                    <div class="code-block">
+                        <pre>
+&lt;a href="..." onclick="return confirm('Are you sure?');"&gt;Delete&lt;/a&gt;
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- File Structure -->
+            <section id="files" class="doc-section">
+                <h2>File Structure</h2>
+
+                <div class="file-tree">
+                    <pre>
+Assignment5/
+├── index.html              # Dashboard/Home page
+├── add_student.php         # Create/Insert operation
+├── view_students.php       # Read operation & delete
+├── edit_student.php        # Update operation
+├── db_setup.php            # Database setup & initialization
+├── documentation.html      # This documentation
+├── config.php              # Database configuration (MySQLi)
+├── config_pdo.php          # Alternative PDO configuration
+├── styles.css              # CSS styling
+└── README.md               # Quick reference
+                    </pre>
+                </div>
+
+                <div class="file-descriptions">
+                    <h3>File Descriptions:</h3>
+                    <table class="file-table">
+                        <tr>
+                            <th>File</th>
+                            <th>Purpose</th>
+                            <th>Type</th>
+                        </tr>
+                        <tr>
+                            <td>index.html</td>
+                            <td>Dashboard with feature overview</td>
+                            <td>HTML</td>
+                        </tr>
+                        <tr>
+                            <td>add_student.php</td>
+                            <td>Form and INSERT operation</td>
+                            <td>PHP</td>
+                        </tr>
+                        <tr>
+                            <td>view_students.php</td>
+                            <td>Display table and DELETE operation</td>
+                            <td>PHP</td>
+                        </tr>
+                        <tr>
+                            <td>edit_student.php</td>
+                            <td>Form and UPDATE operation</td>
+                            <td>PHP</td>
+                        </tr>
+                        <tr>
+                            <td>db_setup.php</td>
+                            <td>Create database and tables</td>
+                            <td>PHP</td>
+                        </tr>
+                        <tr>
+                            <td>config.php</td>
+                            <td>MySQLi database connection</td>
+                            <td>PHP</td>
+                        </tr>
+                        <tr>
+                            <td>styles.css</td>
+                            <td>All styling and layout</td>
+                            <td>CSS</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+
+                <div class="faq-item">
+                    <h4>Q: How do I change the database password?</h4>
+                    <p>A: Edit <code>config.php</code> and update the <code>DB_PASSWORD</code> constant with your MySQL password.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: How do I backup the database?</h4>
+                    <p>A: Use MySQL command: <code>mysqldump -u root student_db > backup.sql</code></p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: What's the difference between MySQLi and PDO?</h4>
+                    <p>A: MySQLi is MySQL-specific while PDO works with multiple databases. Both support prepared statements and are secure.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: Can I use this with other databases like PostgreSQL?</h4>
+                    <p>A: Yes if you switch to PDO and update the connection string in config_pdo.php</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Q: How do I add more fields to the students table?</h4>
+                    <p>A: Use <code>ALTER TABLE students ADD COLUMN phone VARCHAR(15);</code> in phpmyadmin or command line.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Student Management System | Database Operations Assignment</p>
+    </footer>
+</body>
+</html>

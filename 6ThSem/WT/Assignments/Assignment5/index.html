@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Database Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 Student Management System</h1>
+            <p>Manage student records with PHP & MySQL</p>
+        </header>
+
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-link active">Dashboard</a>
+            <a href="view_students.php" class="nav-link">View All Students</a>
+            <a href="add_student.php" class="nav-link">Add New Student</a>
+            <a href="db_setup.php" class="nav-link">Database Setup</a>
+            <a href="documentation.html" class="nav-link">Documentation</a>
+        </nav>
+
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h2>Welcome to Student Database Management</h2>
+                <p>This application demonstrates complete CRUD operations using PHP and MySQL.</p>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">➕</div>
+                    <h3>Add Students</h3>
+                    <p>Insert new student records into the database</p>
+                    <a href="add_student.php" class="btn btn-primary">Add Student</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">👀</div>
+                    <h3>View Records</h3>
+                    <p>Display all student records with details</p>
+                    <a href="view_students.php" class="btn btn-primary">View All</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">✏️</div>
+                    <h3>Update Records</h3>
+                    <p>Edit existing student information</p>
+                    <a href="view_students.php" class="btn btn-primary">Edit Records</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🗑️</div>
+                    <h3>Delete Records</h3>
+                    <p>Remove student records from database</p>
+                    <a href="view_students.php" class="btn btn-primary">Manage</a>
+                </div>
+            </section>
+
+            <!-- Database Info -->
+            <section class="info-section">
+                <h2>Database Information</h2>
+                <div class="info-box">
+                    <h3>Setup Required:</h3>
+                    <ul>
+                        <li>✓ MySQL Server running on localhost</li>
+                        <li>✓ Database: <code>student_db</code></li>
+                        <li>✓ Table: <code>students</code> (id, name, email)</li>
+                        <li>✓ PHP with MySQLi extension enabled</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>Quick Start:</h3>
+                    <ol>
+                        <li>Go to <a href="db_setup.php">Database Setup</a> page</li>
+                        <li>Click "Create Database & Table" button</li>
+                        <li>Add new student records</li>
+                        <li>View and manage student information</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Technical Details -->
+            <section class="tech-section">
+                <h2>Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <h4>Backend</h4>
+                        <ul>
+                            <li>PHP 7.0+</li>
+                            <li>MySQLi OOP</li>
+                            <li>CRUD Operations</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card">
+                        <h4>Database</h4>
+                        <ul>
+                            <li>MySQL 5.7+</li>
+                            <li>InnoDB Engine</li>
+                            <li>UTF-8 Encoding</li>
+                        </ul>
+                    </div>
+                    <div class="tech-card">
+                        <h4>Frontend</h4>
+                        <ul>
+                            <li>HTML5</li>
+                            <li>CSS3</li>
+                            <li>Responsive Design</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Student Management System | Database Operations Assignment</p>
+    </footer>
+</body>
+</html>

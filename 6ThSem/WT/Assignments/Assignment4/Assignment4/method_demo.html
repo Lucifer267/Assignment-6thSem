@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET vs POST Method Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>GET vs POST Method Demonstration</h1>
+        
+        <div class="nav-menu">
+            <a href="index.html">Registration</a>
+            <a href="login.php">Login</a>
+            <a href="check_session.php">Check Session</a>
+            <a href="method_demo.html" class="active">GET/POST Demo</a>
+        </div>
+
+        <div class="form-section">
+            <h2>Form Submission Methods Comparison</h2>
+            
+            <!-- GET Method Form -->
+            <div class="method-comparison">
+                <div class="method-box">
+                    <h3>GET Method</h3>
+                    <form action="process_form.php" method="GET" class="demo-form">
+                        <div class="form-group">
+                            <label for="name_get">Name:</label>
+                            <input 
+                                type="text" 
+                                id="name_get" 
+                                name="name" 
+                                placeholder="Enter name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email_get">Email:</label>
+                            <input 
+                                type="email" 
+                                id="email_get" 
+                                name="email" 
+                                placeholder="Enter email"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message_get">Message:</label>
+                            <textarea 
+                                id="message_get" 
+                                name="message" 
+                                rows="3"
+                                placeholder="Your message"
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-info" name="method" value="GET">Submit via GET</button>
+                    </form>
+                    <p class="method-note">ℹ Data appears in URL. Good for searches.</p>
+                </div>
+
+                <div class="method-box">
+                    <h3>POST Method</h3>
+                    <form action="process_form.php" method="POST" class="demo-form">
+                        <div class="form-group">
+                            <label for="name_post">Name:</label>
+                            <input 
+                                type="text" 
+                                id="name_post" 
+                                name="name" 
+                                placeholder="Enter name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email_post">Email:</label>
+                            <input 
+                                type="email" 
+                                id="email_post" 
+                                name="email" 
+                                placeholder="Enter email"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message_post">Message:</label>
+                            <textarea 
+                                id="message_post" 
+                                name="message" 
+                                rows="3"
+                                placeholder="Your message"
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" name="method" value="POST">Submit via POST</button>
+                    </form>
+                    <p class="method-note">✓ Data hidden in body. Better for sensitive info.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>GET vs POST Comparison:</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>Aspect</th>
+                    <th>GET</th>
+                    <th>POST</th>
+                </tr>
+                <tr>
+                    <td>Data Location</td>
+                    <td>URL Query String</td>
+                    <td>Request Body</td>
+                </tr>
+                <tr>
+                    <td>Visibility</td>
+                    <td>Visible in URL</td>
+                    <td>Hidden</td>
+                </tr>
+                <tr>
+                    <td>Security</td>
+                    <td>Less Secure</td>
+                    <td>More Secure</td>
+                </tr>
+                <tr>
+                    <td>Data Size Limit</td>
+                    <td>Limited (~2KB)</td>
+                    <td>Large data (50MB+)</td>
+                </tr>
+                <tr>
+                    <td>Caching</td>
+                    <td>Can be cached</td>
+                    <td>Not cached</td>
+                </tr>
+                <tr>
+                    <td>Use Case</td>
+                    <td>Searches, Filters</td>
+                    <td>Forms, Passwords</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Form Processing & Session Management Assignment</p>
+    </footer>
+</body>
+</html>

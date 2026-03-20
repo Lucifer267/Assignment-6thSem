@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration & Login Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>User Registration & Login System</h1>
+        
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <a href="index.html" class="active">Registration</a>
+            <a href="login.php">Login</a>
+            <a href="check_session.php">Check Session</a>
+            <a href="method_demo.html">GET/POST Demo</a>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="form-section">
+            <h2>User Registration Form</h2>
+            <form action="register_user.php" method="POST" class="registration-form">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required
+                        placeholder="Enter your full name"
+                    >
+                    <small>Letters and spaces only</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required
+                        placeholder="example@domain.com"
+                    >
+                    <small>Must be a valid email format</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                        placeholder="At least 6 characters"
+                        minlength="6"
+                    >
+                    <small>Minimum 6 characters required</small>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">Register (POST)</button>
+                    <button type="reset" class="btn btn-secondary">Clear</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>Form Features:</h3>
+            <ul>
+                <li>✓ HTML Form with Name, Email, Password fields</li>
+                <li>✓ POST method for secure form submission</li>
+                <li>✓ Email format validation</li>
+                <li>✓ Cookie storage for username</li>
+                <li>✓ Session-based authentication</li>
+                <li>✓ GET/POST method comparison demo</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Form Processing & Session Management Assignment</p>
+    </footer>
+</body>
+</html>
