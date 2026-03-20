@@ -1,0 +1,5 @@
+{
+  "name": "Electricity Bill Calculator",
+  "description": "A responsive electricity bill calculator based on unit slabs.",
+  "requestFramePermissions": []
+}

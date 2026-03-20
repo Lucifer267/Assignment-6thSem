@@ -1,0 +1,510 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #2563eb;
+    --primary-dark: #1e40af;
+    --success-color: #10b981;
+    --error-color: #ef4444;
+    --warning-color: #f59e0b;
+    --light-bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --border-color: #e5e7eb;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+/* Main Content */
+main {
+    padding: 40px 20px;
+}
+
+/* Calculator Card */
+.calculator-card {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Form Styling */
+.calculator-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.form-group label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.form-group input {
+    padding: 14px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--light-bg);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.unit-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Alert Messages */
+.alert {
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+    border-left: 4px solid var(--error-color);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button */
+.btn-calculate {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.btn-calculate:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-calculate:active {
+    transform: translateY(0);
+}
+
+/* Results Section */
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    animation: slideIn 0.4s ease;
+}
+
+.bill-summary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+.bill-summary h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item .label {
+    font-weight: 500;
+}
+
+.summary-item .value {
+    font-weight: 600;
+}
+
+.summary-item.total-bill {
+    font-size: 1.3rem;
+    padding: 16px 0;
+    margin-top: 10px;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none;
+}
+
+.summary-item.total-bill .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Bill Breakdown */
+.bill-breakdown {
+    background: var(--light-bg);
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid var(--border-color);
+}
+
+.bill-breakdown h3,
+.rate-info h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.breakdown-table thead {
+    background: var(--primary-color);
+    color: white;
+}
+
+.breakdown-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.breakdown-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.breakdown-table tbody tr:hover {
+    background: var(--light-bg);
+}
+
+.breakdown-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Rate Information */
+.rate-info {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid var(--border-color);
+}
+
+.rate-info h4 {
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.rate-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rate-list li {
+    padding: 12px 15px;
+    background: var(--light-bg);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.rate-list li:hover {
+    background: white;
+    box-shadow: var(--shadow);
+    transform: translateX(5px);
+}
+
+.rate-list strong {
+    color: var(--primary-color);
+}
+
+/* Info Section */
+.info-section {
+    background: var(--light-bg);
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px dashed var(--border-color);
+}
+
+.info-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.info-section p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Examples */
+.examples {
+    background: var(--light-bg);
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 30px;
+    border: 2px solid var(--border-color);
+}
+
+.examples h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.example-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-color);
+}
+
+.example-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.example-units {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.example-bill {
+    font-size: 1.5rem;
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+/* Footer */
+footer {
+    background: var(--light-bg);
+    border-top: 2px solid var(--border-color);
+    padding: 20px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    main {
+        padding: 30px 15px;
+    }
+
+    .breakdown-table {
+        font-size: 0.95rem;
+    }
+
+    .breakdown-table th,
+    .breakdown-table td {
+        padding: 12px 8px;
+    }
+
+    .summary-item {
+        font-size: 0.95rem;
+    }
+
+    .summary-item.total-bill {
+        font-size: 1.15rem;
+    }
+
+    .summary-item.total-bill .value {
+        font-size: 1.5rem;
+    }
+
+    .example-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rate-list li {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 30px 15px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+
+    main {
+        padding: 20px 12px;
+    }
+
+    .calculator-form,
+    .results {
+        gap: 15px;
+    }
+
+    .bill-summary,
+    .bill-breakdown,
+    .rate-info {
+        padding: 18px;
+    }
+
+    .bill-summary h2 {
+        font-size: 1.3rem;
+    }
+
+    .breakdown-table {
+        font-size: 0.85rem;
+    }
+
+    .breakdown-table th,
+    .breakdown-table td {
+        padding: 10px 6px;
+    }
+
+    .example-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .examples {
+        padding: 20px;
+    }
+
+    .rate-list li {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+    }
+
+    footer {
+        font-size: 0.85rem;
+        padding: 15px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+    }
+
+    .calculator-form,
+    .btn-calculate,
+    footer {
+        display: none;
+    }
+
+    .container {
+        box-shadow: none;
+        max-width: 100%;
+    }
+
+    header {
+        background: var(--primary-color);
+    }
+}
