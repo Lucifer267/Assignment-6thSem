@@ -1,0 +1,14 @@
+{
+  "name": "vit-result-portal-fullstack",
+  "version": "1.0.0",
+  "description": "VIT Student Result Portal - Full Stack",
+  "scripts": {
+    "dev": "concurrently \"cd backend && php -S localhost:8000\" \"cd frontend && npm run dev\"",
+    "backend": "cd backend && php -S localhost:8000",
+    "frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd frontend && npm install && cd .."
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

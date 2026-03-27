@@ -1,0 +1,174 @@
+.student-card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.student-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.student-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+
+.student-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.roll-number {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.course {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.marks-section {
+  padding: 20px;
+}
+
+/* Marks Display */
+.marks-display {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subject-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border-left: 4px solid #667eea;
+}
+
+.subject-name {
+  font-weight: 600;
+  flex: 1;
+  color: #333;
+}
+
+.marks-info {
+  display: flex;
+  gap: 15px;
+}
+
+.mark {
+  background: white;
+  padding: 5px 12px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  border: 1px solid #e9ecef;
+}
+
+/* Marks Edit */
+.marks-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.edit-subject {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-subject label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.edit-marks {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-marks input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.edit-marks input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-buttons .btn {
+  flex: 1;
+}
+
+/* Media Queries for Student Component */
+@media (max-width: 768px) {
+  .student-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .subject-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .marks-info {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .edit-marks {
+    flex-direction: column;
+  }
+
+  .edit-buttons {
+    flex-direction: column;
+  }
+
+  .edit-buttons .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-header {
+    padding: 15px;
+  }
+
+  .marks-section {
+    padding: 15px;
+  }
+
+  .subject-row {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .mark {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+  }
+}
