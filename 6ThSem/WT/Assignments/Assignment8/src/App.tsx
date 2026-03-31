@@ -3,6 +3,51 @@ import FeedbackForm from './components/FeedbackForm';
 import FeedbackList from './components/FeedbackList';
 import { Feedback, SortOption } from './types';
 
+const DEGREE_COURSE_CATALOG = {
+  'Computer Engineering': [
+    { courseName: 'Data Structures and Algorithms', professorName: 'Prof. Aarav Sharma' },
+    { courseName: 'Operating Systems', professorName: 'Prof. Neha Kulkarni' },
+    { courseName: 'Computer Networks', professorName: 'Prof. Rohan Mehta' },
+    { courseName: 'Database Management Systems', professorName: 'Prof. Priya Nair' },
+  ],
+  Law: [
+    { courseName: 'Constitutional Law', professorName: 'Prof. Ananya Deshmukh' },
+    { courseName: 'Criminal Law', professorName: 'Prof. Vivek Rao' },
+    { courseName: 'Contract Law', professorName: 'Prof. Kavya Menon' },
+    { courseName: 'Jurisprudence', professorName: 'Prof. Siddharth Jain' },
+  ],
+  Medicine: [
+    { courseName: 'Anatomy', professorName: 'Dr. Meera Iyer' },
+    { courseName: 'Physiology', professorName: 'Dr. Arjun Malhotra' },
+    { courseName: 'Pharmacology', professorName: 'Dr. Nisha Bansal' },
+    { courseName: 'Pathology', professorName: 'Dr. Kunal Verma' },
+  ],
+  'Mechanical Engineering': [
+    { courseName: 'Thermodynamics', professorName: 'Prof. Aditya Patil' },
+    { courseName: 'Fluid Mechanics', professorName: 'Prof. Sneha Reddy' },
+    { courseName: 'Machine Design', professorName: 'Prof. Harsh Vora' },
+    { courseName: 'Manufacturing Processes', professorName: 'Prof. Deepa Krishnan' },
+  ],
+  'Civil Engineering': [
+    { courseName: 'Structural Analysis', professorName: 'Prof. Ishita Ghosh' },
+    { courseName: 'Geotechnical Engineering', professorName: 'Prof. Manav Arora' },
+    { courseName: 'Transportation Engineering', professorName: 'Prof. Tanya Kapoor' },
+    { courseName: 'Construction Management', professorName: 'Prof. Rahul Batra' },
+  ],
+  'Business Administration': [
+    { courseName: 'Financial Accounting', professorName: 'Prof. Ritu Agarwal' },
+    { courseName: 'Marketing Management', professorName: 'Prof. Nitin Sethi' },
+    { courseName: 'Business Analytics', professorName: 'Prof. Pooja Sinha' },
+    { courseName: 'Organizational Behavior', professorName: 'Prof. Akash Chawla' },
+  ],
+  Psychology: [
+    { courseName: 'Cognitive Psychology', professorName: 'Prof. Rhea Thomas' },
+    { courseName: 'Developmental Psychology', professorName: 'Prof. Amanpreet Kaur' },
+    { courseName: 'Abnormal Psychology', professorName: 'Prof. Farhan Ali' },
+    { courseName: 'Counseling Psychology', professorName: 'Prof. Diya Fernandes' },
+  ],
+} as const;
+
 export default function App() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [sortOption, setSortOption] = useState<SortOption>('latest');
@@ -15,7 +60,13 @@ export default function App() {
     const saved = localStorage.getItem('student_feedback');
     if (saved) {
       try {
-        setFeedbacks(JSON.parse(saved));
+        const parsed = JSON.parse(saved) as Partial<Feedback>[];
+        const migrated = parsed.map((item) => ({
+          ...item,
+          degreeProgram: item.degreeProgram || 'Not specified',
+          professorName: item.professorName || 'Not specified',
+        })) as Feedback[];
+        setFeedbacks(migrated);
       } catch (e) {
         console.error('Failed to parse saved feedback', e);
       }
@@ -119,8 +170,8 @@ export default function App() {
               <li className="flex gap-3">
                 <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded font-semibold text-sm">2</span>
                 <div>
-                  <p className="font-medium">Select Course</p>
-                  <p className="text-sm text-gray-600">Choose the course to review</p>
+                  <p className="font-medium">Select Degree & Course</p>
+                  <p className="text-sm text-gray-600">Choose your degree, then pick a course</p>
                 </div>
               </li>
               <li className="flex gap-3">
@@ -134,7 +185,7 @@ export default function App() {
           </div>
 
           <div className="lg:col-span-2">
-            <FeedbackForm onSubmit={handleAddFeedback} />
+            <FeedbackForm onSubmit={handleAddFeedback} degreeCatalog={DEGREE_COURSE_CATALOG} />
           </div>
         </section>
 

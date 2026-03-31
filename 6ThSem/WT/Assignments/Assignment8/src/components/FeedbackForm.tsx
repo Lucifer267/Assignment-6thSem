@@ -3,13 +3,16 @@ import { Feedback } from '../types';
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Omit<Feedback, 'id' | 'timestamp'>) => void;
+  degreeCatalog: Record<string, ReadonlyArray<{ courseName: string; professorName: string }>>;
 }
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
+const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) => {
   const [formData, setFormData] = useState({
     studentName: '',
     email: '',
+    degreeProgram: '',
     courseName: '',
+    professorName: '',
     rating: 5,
     feedbackText: '',
   });
@@ -35,8 +38,14 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
         if (!value.trim()) error = 'Email is required.';
         else if (!emailRegex.test(value)) error = 'Please enter a valid email address.';
         break;
+      case 'degreeProgram':
+        if (!value.trim()) error = 'Degree is required.';
+        break;
       case 'courseName':
         if (!value.trim()) error = 'Course name is required.';
+        break;
+      case 'professorName':
+        if (!value.trim()) error = 'Professor is required.';
         break;
       case 'feedbackText':
         if (!value.trim()) error = 'Feedback is required.';
@@ -51,12 +60,47 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     const val = name === 'rating' ? parseInt(value) : value;
+    let nextProfessorName = formData.professorName;
 
-    setFormData(prev => ({ ...prev, [name]: val }));
+    if (name === 'degreeProgram') {
+      nextProfessorName = '';
+      setFormData((prev) => ({
+        ...prev,
+        degreeProgram: value,
+        courseName: '',
+        professorName: '',
+      }));
+    } else if (name === 'courseName') {
+      const selectedCourse = formData.degreeProgram
+        ? degreeCatalog[formData.degreeProgram]?.find((course) => course.courseName === value)
+        : undefined;
+      nextProfessorName = selectedCourse?.professorName || '';
+
+      setFormData((prev) => ({
+        ...prev,
+        courseName: value,
+        professorName: nextProfessorName,
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: val }));
+    }
 
     if (isTouched[name]) {
       const error = validate(name, val);
       setErrors(prev => ({ ...prev, [name]: error }));
+    }
+
+    if (name === 'degreeProgram' || name === 'courseName') {
+      const dependentFields = name === 'degreeProgram' ? ['courseName', 'professorName'] : ['professorName'];
+      dependentFields.forEach((field) => {
+        if (isTouched[field]) {
+          const dependencyValue = field === 'professorName'
+            ? nextProfessorName
+            : '';
+          const dependencyError = validate(field, dependencyValue);
+          setErrors((prev) => ({ ...prev, [field]: dependencyError }));
+        }
+      });
     }
   };
 
@@ -81,7 +125,9 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
       setFormData({
         studentName: '',
         email: '',
+        degreeProgram: '',
         courseName: '',
+        professorName: '',
         rating: 5,
         feedbackText: '',
       });
@@ -95,6 +141,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
   };
 
   const isValid = Object.keys(formData).every(key => !validate(key, (formData as any)[key]));
+  const degreeOptions = Object.keys(degreeCatalog);
+  const courseOptions = formData.degreeProgram ? degreeCatalog[formData.degreeProgram] || [] : [];
 
   return (
     <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-lg p-8 space-y-6">
@@ -146,22 +194,73 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
+          <label htmlFor="degreeProgram" className="block text-sm font-medium text-gray-700 mb-2">
+            Degree Program *
+          </label>
+          <select
+            id="degreeProgram"
+            name="degreeProgram"
+            value={formData.degreeProgram}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
+              errors.degreeProgram ? 'border-red-500' : 'border-gray-300'
+            }`}
+          >
+            <option value="">Select your degree</option>
+            {degreeOptions.map((degree) => (
+              <option key={degree} value={degree}>
+                {degree}
+              </option>
+            ))}
+          </select>
+          {errors.degreeProgram && <p className="mt-1 text-sm text-red-600">{errors.degreeProgram}</p>}
+        </div>
+
+        <div>
           <label htmlFor="courseName" className="block text-sm font-medium text-gray-700 mb-2">
             Course Name *
           </label>
-          <input
-            type="text"
+          <select
             id="courseName"
             name="courseName"
             value={formData.courseName}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="e.g., Introduction to React"
+            disabled={!formData.degreeProgram}
             className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
               errors.courseName ? 'border-red-500' : 'border-gray-300'
             }`}
-          />
+          >
+            <option value="">{formData.degreeProgram ? 'Select a course' : 'Select degree first'}</option>
+            {courseOptions.map((course) => (
+              <option key={course.courseName} value={course.courseName}>
+                {course.courseName}
+              </option>
+            ))}
+          </select>
           {errors.courseName && <p className="mt-1 text-sm text-red-600">{errors.courseName}</p>}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="professorName" className="block text-sm font-medium text-gray-700 mb-2">
+            Professor *
+          </label>
+          <input
+            type="text"
+            id="professorName"
+            name="professorName"
+            value={formData.professorName}
+            onBlur={handleBlur}
+            readOnly
+            placeholder="Professor will be auto-filled"
+            className={`w-full px-4 py-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
+              errors.professorName ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {errors.professorName && <p className="mt-1 text-sm text-red-600">{errors.professorName}</p>}
         </div>
 
         <div>

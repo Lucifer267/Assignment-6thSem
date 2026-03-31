@@ -28,7 +28,9 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({ feedback, onDelete, isNew }
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="font-semibold text-gray-900">{feedback.studentName}</h3>
+          <p className="text-xs text-blue-700 font-medium mt-1">{feedback.degreeProgram}</p>
           <p className="text-sm text-gray-600 mt-1">{feedback.courseName}</p>
+          <p className="text-xs text-gray-500 mt-1">{feedback.professorName}</p>
         </div>
         <button
           onClick={() => onDelete(feedback.id)}
