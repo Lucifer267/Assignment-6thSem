@@ -232,6 +232,8 @@ function AdminPanel({ students, loading, error, setError, setStudents }) {
   const [marks, setMarks] = useState({ mse1: '', ese1: '', mse2: '', ese2: '', mse3: '', ese3: '', mse4: '', ese4: '' })
   const [inlineEditingRoll, setInlineEditingRoll] = useState(null)
   const [inlineMarks, setInlineMarks] = useState({})
+  const [inlineIdentityRoll, setInlineIdentityRoll] = useState(null)
+  const [inlineIdentity, setInlineIdentity] = useState({ name: '', email: '' })
 
   const getSubjectsByDegree = (course) => {
     if (course.includes('CSE') || course.includes('Computer')) {
@@ -475,6 +477,56 @@ function AdminPanel({ students, loading, error, setError, setStudents }) {
     setInlineMarks(prev => ({ ...prev, [field]: parseFloat(value) || 0 }))
   }
 
+  const handleStartInlineIdentityEdit = (student) => {
+    setInlineEditingRoll(null)
+    setInlineIdentityRoll(student.roll_number)
+    setInlineIdentity({
+      name: student.name || '',
+      email: student.email || ''
+    })
+  }
+
+  const handleInlineIdentityChange = (field, value) => {
+    setInlineIdentity(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleSaveInlineIdentity = async (rollNumber) => {
+    const payload = {
+      roll_number: rollNumber,
+      name: inlineIdentity.name.trim(),
+      email: inlineIdentity.email.trim()
+    }
+
+    if (!payload.name) {
+      setError('Name cannot be empty')
+      return
+    }
+
+    if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/api/update_student_identity.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      const data = await response.json()
+      if (data.success) {
+        setStudents(students.map(s => s.roll_number === rollNumber ? { ...s, name: payload.name, email: payload.email } : s))
+        setInlineIdentityRoll(null)
+        setError(null)
+        alert('Student details updated successfully!')
+      } else {
+        setError(data.message)
+      }
+    } catch (err) {
+      setError('Failed to update student details: ' + err.message)
+    }
+  }
+
   const handleSaveInlineMarks = async (rollNumber) => {
     try {
       const response = await fetch('http://localhost:8000/api/update_marks.php', {
@@ -541,13 +593,38 @@ function AdminPanel({ students, loading, error, setError, setStudents }) {
                 const total = calculateTotal(student)
                 const gradeInfo = getGrade(total)
                 const isEditing = inlineEditingRoll === student.roll_number
+                const isIdentityEditing = inlineIdentityRoll === student.roll_number
 
                 return (
-                  <tr key={student.roll_number} className={isEditing ? 'editing-row' : ''}>
+                  <tr key={student.roll_number} className={isEditing || isIdentityEditing ? 'editing-row' : ''}>
                     <td><strong>{student.roll_number}</strong></td>
-                    <td>{student.name}</td>
+                    <td>
+                      {isIdentityEditing ? (
+                        <input
+                          type="text"
+                          value={inlineIdentity.name}
+                          onChange={(e) => handleInlineIdentityChange('name', e.target.value)}
+                          className="inline-identity-input"
+                          placeholder="Student Name"
+                        />
+                      ) : (
+                        student.name
+                      )}
+                    </td>
                     <td>{student.course}</td>
-                    <td>{student.email}</td>
+                    <td>
+                      {isIdentityEditing ? (
+                        <input
+                          type="email"
+                          value={inlineIdentity.email}
+                          onChange={(e) => handleInlineIdentityChange('email', e.target.value)}
+                          className="inline-identity-input"
+                          placeholder="Email"
+                        />
+                      ) : (
+                        student.email
+                      )}
+                    </td>
                     <td>
                       {isEditing ? (
                         <div className="inline-marks-edit">
@@ -578,9 +655,15 @@ function AdminPanel({ students, loading, error, setError, setStudents }) {
                           <button onClick={() => handleSaveInlineMarks(student.roll_number)} className="btn-save">💾 Save</button>
                           <button onClick={() => setInlineEditingRoll(null)} className="btn-cancel">✕ Cancel</button>
                         </>
+                      ) : isIdentityEditing ? (
+                        <>
+                          <button onClick={() => handleSaveInlineIdentity(student.roll_number)} className="btn-save">💾 Save User</button>
+                          <button onClick={() => setInlineIdentityRoll(null)} className="btn-cancel">✕ Cancel</button>
+                        </>
                       ) : (
                         <>
                           <button onClick={() => handleStartInlineEdit(student)} className="btn-edit">✏️ Edit</button>
+                          <button onClick={() => handleStartInlineIdentityEdit(student)} className="btn-edit-user">👤 Edit User</button>
                           <button onClick={() => handleDeleteStudent(student.roll_number)} className="btn-delete">🗑️ Delete</button>
                         </>
                       )}

@@ -5,6 +5,7 @@ import FeedbackCard from './FeedbackCard';
 interface FeedbackListProps {
   feedbacks: Feedback[];
   onDelete: (id: string) => void;
+  onUpdateUser: (id: string, studentName: string, email: string) => void;
   onSortChange: (sort: SortOption) => void;
   currentSort: SortOption;
   newFeedbackId?: string | null;
@@ -13,32 +14,33 @@ interface FeedbackListProps {
 const FeedbackList: React.FC<FeedbackListProps> = ({
   feedbacks,
   onDelete,
+  onUpdateUser,
   onSortChange,
   currentSort,
   newFeedbackId,
 }) => {
   if (feedbacks.length === 0) {
     return (
-      <div className="text-center py-16 bg-gray-50 border border-gray-200 rounded-lg">
-        <p className="text-gray-500 font-medium">No feedback entries yet. Be the first to submit!</p>
+      <div className="text-center py-16 soft-panel rounded-2xl">
+        <p className="font-medium text-slate-700">No submissions yet. Your feedback will appear here once submitted.</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-gray-200 pb-4">
-        <h3 className="text-lg font-semibold">All Feedback ({feedbacks.length})</h3>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[#d8d2c8] pb-4">
+        <h3 className="text-lg font-semibold text-slate-900">All Records ({feedbacks.length})</h3>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="sort" className="text-sm font-medium text-gray-600">
+          <label htmlFor="sort" className="text-sm font-medium text-slate-600">
             Sort by:
           </label>
           <select
             id="sort"
             value={currentSort}
             onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            className="px-3 py-2 border border-[#d8d2c8] rounded-xl text-sm bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none"
           >
             <option value="latest">Latest First</option>
             <option value="highest-rated">Highest Rated</option>
@@ -52,6 +54,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
             key={feedback.id}
             feedback={feedback}
             onDelete={onDelete}
+            onUpdateUser={onUpdateUser}
             isNew={feedback.id === newFeedbackId}
           />
         ))}

@@ -1,0 +1,5 @@
+{
+  "name": "Product Inventory Management System",
+  "description": "A production-quality Product Inventory Management System with MongoDB, Basic Auth, and Clean Architecture.",
+  "requestFramePermissions": []
+}

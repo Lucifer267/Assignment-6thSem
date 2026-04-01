@@ -101,6 +101,20 @@ export default function App() {
     setFeedbacks(prev => prev.filter(f => f.id !== id));
   };
 
+  const handleUpdateFeedbackUser = (id: string, studentName: string, email: string) => {
+    setFeedbacks((prev) => {
+      const target = prev.find((item) => item.id === id);
+      if (!target) return prev;
+
+      // Propagate identity corrections to all entries from the same user email.
+      return prev.map((item) => (
+        item.id === id || item.email === target.email
+          ? { ...item, studentName, email }
+          : item
+      ));
+    });
+  };
+
   const sortedFeedbacks = useMemo(() => {
     const sorted = [...feedbacks];
     if (sortOption === 'latest') {
@@ -111,90 +125,99 @@ export default function App() {
     return sorted;
   }, [feedbacks, sortOption]);
 
+  const averageRating = feedbacks.length
+    ? (feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length).toFixed(1)
+    : '-';
+
+  const coursesReviewed = feedbacks.length
+    ? [...new Set(feedbacks.map(f => f.courseName))].length
+    : '-';
+
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      {/* Header */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-6">
-          <h1 className="text-2xl font-semibold">Course Feedback System</h1>
-          <p className="text-sm text-gray-600 mt-1">Collect and manage course feedback</p>
+    <div className="min-h-screen text-slate-800">
+      <header className="sticky top-0 z-10 backdrop-blur-sm border-b border-[#d8d2c8] bg-[#f1eee8]/90">
+        <div className="max-w-6xl mx-auto px-5 py-5 sm:px-6">
+          <p className="text-xs tracking-[0.18em] uppercase text-teal-800 font-semibold">Academic Quality Office</p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <h1 className="font-editorial text-3xl sm:text-4xl text-slate-900">Teaching Feedback Portal</h1>
+            <p className="text-sm text-slate-600 max-w-md">
+              Structured student feedback for course delivery, faculty communication, and learning outcomes.
+            </p>
+          </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
-        {/* Introduction Section */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-4">Submit Your Feedback</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl">
-            Help us improve our courses by sharing your honest feedback. Your input helps us understand what's working well and what needs improvement.
-          </p>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="text-2xl font-bold text-blue-600 mb-2">{feedbacks.length}</div>
-              <div className="text-gray-600">Total Feedback Entries</div>
+      <main className="max-w-6xl mx-auto px-5 py-10 sm:px-6 sm:py-12">
+        <section className="fade-rise">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-10">
+            <div className="elevated-panel rounded-2xl p-5 lg:p-6">
+              <p className="text-xs uppercase tracking-[0.12em] text-slate-500 mb-3">Submissions Logged</p>
+              <p className="font-editorial text-4xl text-teal-800">{feedbacks.length}</p>
+              <p className="text-sm text-slate-600 mt-3">Responses currently retained in this browser session.</p>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="text-2xl font-bold text-blue-600 mb-2">
-                {feedbacks.length > 0 
-                  ? (feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length).toFixed(1)
-                  : '-'
-                }
-              </div>
-              <div className="text-gray-600">Average Rating</div>
+            <div className="elevated-panel rounded-2xl p-5 lg:p-6">
+              <p className="text-xs uppercase tracking-[0.12em] text-slate-500 mb-3">Average Course Rating</p>
+              <p className="font-editorial text-4xl text-teal-800">{averageRating}</p>
+              <p className="text-sm text-slate-600 mt-3">Calculated from all submitted course evaluations.</p>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="text-2xl font-bold text-blue-600 mb-2">
-                {feedbacks.length > 0 
-                  ? [...new Set(feedbacks.map(f => f.courseName))].length
-                  : '-'
-                }
-              </div>
-              <div className="text-gray-600">Courses Reviewed</div>
+            <div className="elevated-panel rounded-2xl p-5 lg:p-6">
+              <p className="text-xs uppercase tracking-[0.12em] text-slate-500 mb-3">Courses Reviewed</p>
+              <p className="font-editorial text-4xl text-teal-800">{coursesReviewed}</p>
+              <p className="text-sm text-slate-600 mt-3">Unique courses with at least one student response.</p>
             </div>
           </div>
         </section>
 
-        {/* Form Section */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
-          <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold mb-6">How to Submit</h3>
-            <ul className="space-y-4">
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded font-semibold text-sm">1</span>
-                <div>
-                  <p className="font-medium">Enter Your Info</p>
-                  <p className="text-sm text-gray-600">Provide your name and email</p>
-                </div>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded font-semibold text-sm">2</span>
-                <div>
-                  <p className="font-medium">Select Degree & Course</p>
-                  <p className="text-sm text-gray-600">Choose your degree, then pick a course</p>
-                </div>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded font-semibold text-sm">3</span>
-                <div>
-                  <p className="font-medium">Rate & Review</p>
-                  <p className="text-sm text-gray-600">Give a rating and write your feedback</p>
-                </div>
-              </li>
-            </ul>
-          </div>
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-14 items-start">
+          <aside className="lg:col-span-4 space-y-4">
+            <div className="soft-panel rounded-2xl p-6 fade-rise">
+              <h2 className="font-editorial text-2xl text-slate-900 mb-2">Submit Formal Feedback</h2>
+              <p className="text-sm text-slate-700 leading-relaxed">
+                Use this form to provide constructive feedback on course quality. Entries should be specific and respectful to support actionable review.
+              </p>
+            </div>
+            <div className="elevated-panel rounded-2xl p-6 fade-rise">
+              <h3 className="text-base font-semibold text-slate-900 mb-4">Review Workflow</h3>
+              <ul className="space-y-4">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-teal-50 text-teal-800 font-semibold text-sm border border-teal-200">1</span>
+                  <div>
+                    <p className="font-medium text-slate-900">Identify Course Context</p>
+                    <p className="text-sm text-slate-600">Select your degree program and the specific course.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-teal-50 text-teal-800 font-semibold text-sm border border-teal-200">2</span>
+                  <div>
+                    <p className="font-medium text-slate-900">Rate Learning Experience</p>
+                    <p className="text-sm text-slate-600">Assign a rating aligned with your classroom experience.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-teal-50 text-teal-800 font-semibold text-sm border border-teal-200">3</span>
+                  <div>
+                    <p className="font-medium text-slate-900">Document Observations</p>
+                    <p className="text-sm text-slate-600">Share strengths and improvements with clear examples.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </aside>
 
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-8 fade-rise">
             <FeedbackForm onSubmit={handleAddFeedback} degreeCatalog={DEGREE_COURSE_CATALOG} />
           </div>
         </section>
 
-        {/* List Section */}
-        <section ref={listRef}>
-          <h2 className="text-2xl font-bold mb-8">Feedback Entries</h2>
+        <section ref={listRef} className="fade-rise">
+          <div className="mb-6">
+            <h2 className="font-editorial text-3xl text-slate-900">Feedback Records</h2>
+            <p className="text-sm text-slate-600 mt-2">Recent submissions and highly rated experiences are shown below.</p>
+          </div>
           <FeedbackList
             feedbacks={sortedFeedbacks}
             onDelete={handleDeleteFeedback}
+            onUpdateUser={handleUpdateFeedbackUser}
             onSortChange={setSortOption}
             currentSort={sortOption}
             newFeedbackId={newFeedbackId}
@@ -202,11 +225,10 @@ export default function App() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white mt-20">
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <p className="text-sm text-gray-600">
-            © 2026 Course Feedback System. All feedback is stored locally in your browser.
+      <footer className="border-t border-[#d8d2c8] mt-16 bg-[#fffaf0]/80">
+        <div className="max-w-6xl mx-auto px-5 py-6 sm:px-6">
+          <p className="text-sm text-slate-600">
+            Internal quality feedback interface. Entries are stored locally on this browser.
           </p>
         </div>
       </footer>

@@ -145,15 +145,16 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
   const courseOptions = formData.degreeProgram ? degreeCatalog[formData.degreeProgram] || [] : [];
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-lg p-8 space-y-6">
+    <form onSubmit={handleSubmit} className="elevated-panel rounded-2xl p-6 sm:p-8 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold mb-2">Submit Feedback</h2>
-        <p className="text-sm text-gray-600">Fill out the form below to submit your course feedback.</p>
+        <p className="text-xs uppercase tracking-[0.12em] text-slate-500 mb-2">Student Submission Form</p>
+        <h2 className="font-editorial text-3xl text-slate-900 mb-2">Course Evaluation Entry</h2>
+        <p className="text-sm text-slate-600">All fields marked with * are required for a valid submission.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="studentName" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="studentName" className="block text-sm font-semibold text-slate-700 mb-2">
             Your Name *
           </label>
           <input
@@ -164,16 +165,15 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
             value={formData.studentName}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="John Doe"
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-              errors.studentName ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-2.5 border rounded-xl bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition ${
+              errors.studentName ? 'border-amber-700' : 'border-[#d8d2c8]'
             }`}
           />
-          {errors.studentName && <p className="mt-1 text-sm text-red-600">{errors.studentName}</p>}
+          {errors.studentName && <p className="mt-1 text-sm text-amber-800">{errors.studentName}</p>}
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
             Email Address *
           </label>
           <input
@@ -183,18 +183,17 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
             value={formData.email}
             onChange={handleChange}
             onBlur={handleBlur}
-            placeholder="john@example.com"
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-2.5 border rounded-xl bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition ${
+              errors.email ? 'border-amber-700' : 'border-[#d8d2c8]'
             }`}
           />
-          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+          {errors.email && <p className="mt-1 text-sm text-amber-800">{errors.email}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="degreeProgram" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="degreeProgram" className="block text-sm font-semibold text-slate-700 mb-2">
             Degree Program *
           </label>
           <select
@@ -203,8 +202,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
             value={formData.degreeProgram}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-              errors.degreeProgram ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-2.5 border rounded-xl bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition ${
+              errors.degreeProgram ? 'border-amber-700' : 'border-[#d8d2c8]'
             }`}
           >
             <option value="">Select your degree</option>
@@ -214,11 +213,11 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
               </option>
             ))}
           </select>
-          {errors.degreeProgram && <p className="mt-1 text-sm text-red-600">{errors.degreeProgram}</p>}
+          {errors.degreeProgram && <p className="mt-1 text-sm text-amber-800">{errors.degreeProgram}</p>}
         </div>
 
         <div>
-          <label htmlFor="courseName" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="courseName" className="block text-sm font-semibold text-slate-700 mb-2">
             Course Name *
           </label>
           <select
@@ -228,8 +227,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
             onChange={handleChange}
             onBlur={handleBlur}
             disabled={!formData.degreeProgram}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-              errors.courseName ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-2.5 border rounded-xl bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition disabled:bg-slate-100 disabled:text-slate-500 ${
+              errors.courseName ? 'border-amber-700' : 'border-[#d8d2c8]'
             }`}
           >
             <option value="">{formData.degreeProgram ? 'Select a course' : 'Select degree first'}</option>
@@ -239,13 +238,13 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
               </option>
             ))}
           </select>
-          {errors.courseName && <p className="mt-1 text-sm text-red-600">{errors.courseName}</p>}
+          {errors.courseName && <p className="mt-1 text-sm text-amber-800">{errors.courseName}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="professorName" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="professorName" className="block text-sm font-semibold text-slate-700 mb-2">
             Professor *
           </label>
           <input
@@ -256,15 +255,15 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
             onBlur={handleBlur}
             readOnly
             placeholder="Professor will be auto-filled"
-            className={`w-full px-4 py-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition ${
-              errors.professorName ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-2.5 border rounded-xl bg-[#f4efe6] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition ${
+              errors.professorName ? 'border-amber-700' : 'border-[#d8d2c8]'
             }`}
           />
-          {errors.professorName && <p className="mt-1 text-sm text-red-600">{errors.professorName}</p>}
+          {errors.professorName && <p className="mt-1 text-sm text-amber-800">{errors.professorName}</p>}
         </div>
 
         <div>
-          <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="rating" className="block text-sm font-semibold text-slate-700 mb-2">
             Rating *
           </label>
           <select
@@ -272,7 +271,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
             name="rating"
             value={formData.rating}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2.5 border border-[#d8d2c8] rounded-xl bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition"
           >
             <option value={5}>5 - Excellent</option>
             <option value={4}>4 - Good</option>
@@ -284,7 +283,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
       </div>
 
       <div>
-        <label htmlFor="feedbackText" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="feedbackText" className="block text-sm font-semibold text-slate-700 mb-2">
           Your Feedback *
         </label>
         <textarea
@@ -294,24 +293,24 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit, degreeCatalog }) 
           value={formData.feedbackText}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="Share your thoughts on this course. What did you like? What could be improved?"
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none ${
-            errors.feedbackText ? 'border-red-500' : 'border-gray-300'
+          placeholder="Describe what helped your learning and what should be improved next term."
+          className={`w-full px-4 py-2.5 border rounded-xl bg-[#fffdfa] focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 outline-none transition resize-none ${
+            errors.feedbackText ? 'border-amber-700' : 'border-[#d8d2c8]'
           }`}
         />
-        {errors.feedbackText && <p className="mt-1 text-sm text-red-600">{errors.feedbackText}</p>}
+        {errors.feedbackText && <p className="mt-1 text-sm text-amber-800">{errors.feedbackText}</p>}
       </div>
 
       <button
         type="submit"
         disabled={!isValid}
-        className={`w-full py-2.5 px-4 font-medium rounded-lg transition ${
+        className={`w-full py-3 px-4 font-semibold rounded-xl transition ${
           isValid
-            ? 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800'
-            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            ? 'bg-teal-700 text-white hover:bg-teal-800 active:bg-teal-900 shadow-sm'
+            : 'bg-slate-200 text-slate-500 cursor-not-allowed'
         }`}
       >
-        Submit Feedback
+        Submit Evaluation
       </button>
     </form>
   );

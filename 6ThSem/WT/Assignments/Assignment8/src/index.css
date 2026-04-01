@@ -1,1 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+:root {
+	--page-bg: #f1eee8;
+	--panel: #fffdfa;
+	--panel-soft: #f8f4ec;
+	--ink: #1f2933;
+	--ink-soft: #52606d;
+	--accent: #0f766e;
+	--accent-deep: #115e59;
+	--stroke: #d8d2c8;
+	--warn: #b45309;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	font-family: 'Manrope', sans-serif;
+	color: var(--ink);
+	background:
+		radial-gradient(circle at 10% 10%, rgba(15, 118, 110, 0.15), transparent 38%),
+		radial-gradient(circle at 90% 0%, rgba(180, 83, 9, 0.12), transparent 30%),
+		var(--page-bg);
+}
+
+#root {
+	min-height: 100vh;
+}
+
+.font-editorial {
+	font-family: 'Fraunces', serif;
+}
+
+.elevated-panel {
+	background: var(--panel);
+	border: 1px solid var(--stroke);
+	box-shadow: 0 12px 34px rgba(23, 33, 43, 0.08);
+}
+
+.soft-panel {
+	background: var(--panel-soft);
+	border: 1px solid var(--stroke);
+}
+
+.fade-rise {
+	animation: fadeRise 480ms ease both;
+}
+
+@keyframes fadeRise {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
