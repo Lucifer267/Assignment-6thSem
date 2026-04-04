@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Activity Tracker{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center align-items-stretch">
+    <div class="col-lg-5">
+        <div class="hero-panel h-100">
+            <span class="feature-chip mb-3">New account</span>
+            <h1 class="hero-title h2 mb-3">Create a small profile and keep the project moving.</h1>
+            <p class="section-copy mb-4">
+                The registration form is intentionally simple. It checks duplicate usernames, works with Django's built-in auth system, and stays readable enough to explain in class.
+            </p>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="h6 mb-2">What gets stored</h2>
+                    <p class="muted-copy mb-0">Only the user account itself. Theme is still cookie-based and login tracking stays in the session.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h6 mb-2">Password note</h2>
+                    <p class="muted-copy mb-0">Use something you can actually remember. The point here is the workflow, not password gymnastics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card page-card h-100">
+            <div class="card-body p-4 p-lg-5">
+                <h2 class="section-title h3 mb-2">Create Account</h2>
+                <p class="muted-copy mb-4">Make a username and password, then log in with it.</p>
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <small class="text-danger d-block mt-1">{{ form.username.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email <span class="muted-copy">(optional)</span></label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Password</label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <small class="text-danger d-block mt-1">{{ form.password1.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password2" class="form-label">Confirm Password</label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <small class="text-danger d-block mt-1">{{ form.password2.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2">Register</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <span class="muted-copy">Already have an account?</span>
+                    <a href="{% url 'login' %}" class="ms-1">Login here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

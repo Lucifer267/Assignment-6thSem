@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Activity Tracker{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center align-items-stretch">
+    <div class="col-lg-5">
+        <div class="hero-panel h-100 d-flex flex-column justify-content-between">
+            <div>
+                <span class="feature-chip mb-3">Welcome back</span>
+                <h1 class="hero-title h2 mb-3">Login to continue the project flow.</h1>
+                <p class="section-copy mb-0">
+                    After login, the dashboard keeps a session-based timestamp so you can see when the current visit started.
+                </p>
+            </div>
+
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-0 muted-copy">If the login fails, the form stays simple and shows the normal Django auth message instead of trying to be clever.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card page-card h-100">
+            <div class="card-body p-4 p-lg-5">
+                <h2 class="section-title h3 mb-2">Login</h2>
+                <p class="muted-copy mb-4">Use your username and password to continue.</p>
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        {{ form.username }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        {{ form.password }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <span class="muted-copy">No account yet?</span>
+                    <a href="{% url 'register' %}" class="ms-1">Register here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

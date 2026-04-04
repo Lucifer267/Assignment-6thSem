@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Activity Tracker{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <section class="card page-card mb-4">
+            <div class="card-body p-4 p-lg-5">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                        <span class="feature-chip mb-3">Dashboard</span>
+                        <h1 class="hero-title h2 mb-2">Welcome back, {{ user.username }}.</h1>
+                        <p class="section-copy mb-0">This is the part where the session data, auth state, and cached page all come together.</p>
+                    </div>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-secondary px-4">Logout</a>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    {% if login_time %}
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="muted-copy small text-uppercase mb-1">Current session</div>
+                                    <div class="h5 mb-0">{{ login_time|date:"Y-m-d H:i:s" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if last_login %}
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="muted-copy small text-uppercase mb-1">Last login</div>
+                                    <div class="h5 mb-0">{{ last_login|date:"Y-m-d H:i:s" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="card page-card mb-4">
+            <div class="card-body p-4 p-lg-5">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                        <h2 class="section-title h4 mb-1">Recent activity</h2>
+                        <p class="muted-copy mb-0">A short log of the last actions we stored in the database.</p>
+                    </div>
+                    {% if cached %}
+                        <span class="feature-chip">Cached for 60 seconds</span>
+                    {% endif %}
+                </div>
+
+                {% if recent_activities %}
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for activity in recent_activities %}
+                                    <tr>
+                                        <td>
+                                            {% if activity.activity_type == 'login' %}
+                                                <span class="feature-chip">Logged in</span>
+                                            {% else %}
+                                                <span class="feature-chip">Logged out</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ activity.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="muted-copy mb-0">No activity recorded yet. Log out and back in once to see the timeline start moving.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="hero-panel mb-4">
+            <h2 class="section-title h5 mb-3">Profile snapshot</h2>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="muted-copy small text-uppercase mb-1">Username</div>
+                    <div class="fw-semibold">{{ user.username }}</div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="muted-copy small text-uppercase mb-1">Email</div>
+                    <div class="fw-semibold">{{ user.email|default:"Not set" }}</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="muted-copy small text-uppercase mb-1">Member since</div>
+                    <div class="fw-semibold">{{ user.date_joined|date:"M d, Y" }}</div>
+                </div>
+            </div>
+        </div>
+
+        {% if cached %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h6 mb-2">Cached response</h3>
+                    <p class="muted-copy mb-0">This dashboard is cached for 60 seconds. That's enough for the assignment without turning the view into a caching exercise.</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="btn btn-primary w-100 py-2">Back to home</a>
+    </div>
+</div>
+{% endblock %}

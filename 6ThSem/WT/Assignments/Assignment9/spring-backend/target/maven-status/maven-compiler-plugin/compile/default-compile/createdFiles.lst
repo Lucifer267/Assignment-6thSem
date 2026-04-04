@@ -1,0 +1,3 @@
+com\example\inventory\controller\ProductController.class
+com\example\inventory\InventoryApplication.class
+com\example\inventory\config\SecurityConfig.class
