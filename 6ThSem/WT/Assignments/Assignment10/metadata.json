@@ -1,0 +1,6 @@
+{
+  "name": "Student Registry",
+  "description": "A student registration system for submitting details and viewing registered students.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

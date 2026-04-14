@@ -1,0 +1,17 @@
+{
+  "entities": {
+    "Student": {
+      "title": "Student",
+      "description": "A student registered in the system",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier" },
+        "name": { "type": "string", "description": "Full name of the student" },
+        "email": { "type": "string", "format": "email", "description": "Email address" },
+        "course": { "type": "string", "description": "Enrolled course" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Registration timestamp" }
+      },
+      "required": ["name", "email", "course"]
+    }
+  }
+}

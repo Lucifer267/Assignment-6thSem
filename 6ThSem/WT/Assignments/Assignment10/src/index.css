@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+@import "tailwindcss";
+
+:root {
+	font-family: "Sora", "Segoe UI", sans-serif;
+	color: #0f172a;
+	background-color: #f8fafc;
+}
+
+html,
+body,
+#root {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+	background-color: #f8fafc;
+	background-image:
+		radial-gradient(circle at 20% 0%, rgba(251, 191, 36, 0.16), transparent 36%),
+		radial-gradient(circle at 85% 20%, rgba(34, 211, 238, 0.12), transparent 32%),
+		linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+	color: #1e293b;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.font-mono {
+	font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
