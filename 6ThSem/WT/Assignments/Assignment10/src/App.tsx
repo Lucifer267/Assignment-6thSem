@@ -4,7 +4,8 @@ import {
   UserPlus, Users, GraduationCap, Mail, BookOpen, 
   Loader2, CheckCircle2, Search, Filter, ArrowUpRight,
   TrendingUp, Calendar, Hash, MoreHorizontal, LayoutGrid, List,
-  Edit2, Trash2, X, AlertCircle, Save, AlertTriangle
+  Edit2, Trash2, X, AlertCircle, Save, AlertTriangle, LogOut,
+  Lock, User
 } from "lucide-react";
 
 interface Student {
@@ -15,7 +16,20 @@ interface Student {
   createdAt?: string;
 }
 
+interface AuthUser {
+  id: number;
+  username: string;
+  role: string;
+}
+
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
+  const [loginSubmitting, setLoginSubmitting] = useState(false);
+  const [loginMessage, setLoginMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -24,11 +38,9 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
   
-  // Edit modal state
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [editFormData, setEditFormData] = useState({ name: "", email: "", course: "" });
   
-  // Delete confirmation state
   const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -39,13 +51,81 @@ export default function App() {
     "Cyber Security",
   ];
 
+  // Check if user is already authenticated
   useEffect(() => {
-    fetchStudents();
+    const checkAuth = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const res = await fetch("/api/auth/verify", {
+            headers: { "Authorization": `Bearer ${token}` },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setCurrentUser(data.user);
+            setIsAuthenticated(true);
+            fetchStudents(token);
+          } else {
+            localStorage.removeItem("token");
+            setAuthLoading(false);
+          }
+        } catch (err) {
+          console.error("Auth verification failed", err);
+          localStorage.removeItem("token");
+          setAuthLoading(false);
+        }
+      } else {
+        setAuthLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  const fetchStudents = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginSubmitting(true);
+    setLoginMessage(null);
+
     try {
-      const res = await fetch("/api/students");
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        setCurrentUser(data.user);
+        setIsAuthenticated(true);
+        setLoginData({ username: "", password: "" });
+        setLoginMessage({ type: 'success', text: 'Login successful!' });
+        fetchStudents(data.token);
+      } else {
+        const error = await res.json();
+        setLoginMessage({ type: 'error', text: error.error || 'Login failed' });
+      }
+    } catch (err) {
+      setLoginMessage({ type: 'error', text: 'Connection error' });
+    } finally {
+      setLoginSubmitting(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    setStudents([]);
+    setLoginData({ username: "", password: "" });
+  };
+
+  const fetchStudents = async (token: string) => {
+    try {
+      const res = await fetch("/api/students", {
+        headers: { "Authorization": `Bearer ${token}` },
+      });
       const data = await res.json();
       setStudents(data);
     } catch (err) {
@@ -63,6 +143,8 @@ export default function App() {
     );
   }, [students, searchQuery]);
 
+  const getToken = () => localStorage.getItem("token") || "";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -71,7 +153,10 @@ export default function App() {
     try {
       const res = await fetch("/api/students", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${getToken()}`
+        },
         body: JSON.stringify(formData),
       });
 
@@ -105,7 +190,10 @@ export default function App() {
     try {
       const res = await fetch(`/api/students/${editingStudent.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${getToken()}`
+        },
         body: JSON.stringify(editFormData),
       });
 
@@ -137,6 +225,7 @@ export default function App() {
     try {
       const res = await fetch(`/api/students/${studentToDelete.id}`, {
         method: "DELETE",
+        headers: { "Authorization": `Bearer ${getToken()}` },
       });
 
       if (res.ok) {
@@ -155,6 +244,111 @@ export default function App() {
     }
   };
 
+  // Login Page
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[radial-gradient(circle_at_20%_10%,#fff7ed_0%,#f8fafc_40%,#f5f7fb_100%)] text-slate-800 overflow-x-hidden flex items-center justify-center">
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-orange-300/20 blur-3xl" />
+          <div className="absolute top-[35%] -left-24 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative z-10 w-full max-w-md px-5"
+        >
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_16px_40px_-26px_rgba(15,23,42,0.6)] md:p-8">
+            <div className="mb-8 text-center">
+              <div className="mb-4 flex justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-400 shadow-lg shadow-orange-200">
+                  <GraduationCap className="h-8 w-8 text-white" />
+                </div>
+              </div>
+              <h1 className="mb-2 text-3xl font-bold text-slate-900">VIT Registry</h1>
+              <p className="text-sm text-slate-600">Student Management System</p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div className="space-y-2">
+                <label className="ml-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Username</label>
+                <div className="group relative">
+                  <input
+                    required
+                    type="text"
+                    value={loginData.username}
+                    onChange={e => setLoginData({ ...loginData, username: e.target.value })}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-10 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:border-orange-300 focus:bg-white focus:ring-4 focus:ring-orange-100"
+                    placeholder="admin"
+                  />
+                  <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-orange-500" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="ml-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Password</label>
+                <div className="group relative">
+                  <input
+                    required
+                    type="password"
+                    value={loginData.password}
+                    onChange={e => setLoginData({ ...loginData, password: e.target.value })}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-10 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:border-orange-300 focus:bg-white focus:ring-4 focus:ring-orange-100"
+                    placeholder="••••••••"
+                  />
+                  <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-orange-500" />
+                </div>
+              </div>
+
+              <button
+                disabled={loginSubmitting}
+                type="submit"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 py-3.5 font-semibold text-white shadow-lg shadow-orange-200 transition-all hover:from-orange-600 hover:to-amber-600 disabled:opacity-60"
+              >
+                {loginSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : (
+                  <>
+                    <span>Sign In</span>
+                  </>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {loginMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium ${
+                      loginMessage.type === 'success'
+                        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                        : 'border-rose-200 bg-rose-50 text-rose-700'
+                    }`}
+                  >
+                    {loginMessage.type === 'success' ? <CheckCircle2 className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+                    {loginMessage.text}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
+
+            <div className="mt-8 border-t border-slate-200 pt-6">
+              <p className="mb-4 text-center text-sm font-semibold text-slate-700">Demo Credentials</p>
+              <div className="space-y-2 text-sm">
+                <div className="rounded-lg bg-slate-50 p-3">
+                  <p className="font-mono text-slate-900">admin / admin123</p>
+                </div>
+                <div className="rounded-lg bg-slate-50 p-3">
+                  <p className="font-mono text-slate-900">user / user123</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Dashboard Page
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_20%_10%,#fff7ed_0%,#f8fafc_40%,#f5f7fb_100%)] text-slate-800 overflow-x-hidden">
       <div className="fixed inset-0 pointer-events-none">
@@ -174,21 +368,39 @@ export default function App() {
             </div>
           </div>
 
-          <div className="hidden items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1 md:flex">
-            <button
-              onClick={() => setViewMode('table')}
-              className={`rounded-lg p-2 transition-all ${viewMode === 'table' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
-              aria-label="Table view"
-            >
-              <List className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`rounded-lg p-2 transition-all ${viewMode === 'grid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
-              aria-label="Grid view"
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </button>
+          <div className="flex items-center gap-4">
+            <div className="hidden items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1 md:flex">
+              <button
+                onClick={() => setViewMode('table')}
+                className={`rounded-lg p-2 transition-all ${viewMode === 'table' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                aria-label="Table view"
+              >
+                <List className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`rounded-lg p-2 transition-all ${viewMode === 'grid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                aria-label="Grid view"
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="h-8 w-px bg-slate-200" />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-orange-200 to-amber-100 text-xs font-bold text-slate-700">
+                {currentUser?.username.charAt(0).toUpperCase()}
+              </div>
+              <span className="hidden text-sm font-semibold text-slate-900 sm:inline">{currentUser?.username}</span>
+              <button
+                onClick={handleLogout}
+                className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                aria-label="Logout"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -655,7 +867,7 @@ export default function App() {
         <div className="flex flex-col items-center justify-between gap-3 text-sm text-slate-500 md:flex-row">
           <div className="flex items-center gap-2 font-medium">
             <GraduationCap className="h-4 w-4" />
-            <span>VIT Registry Dashboard</span>
+            <span>VIT Registry Dashboard - Local Edition</span>
           </div>
           <div className="flex items-center gap-5 text-xs font-semibold uppercase tracking-[0.12em]">
             <a href="#" className="transition-colors hover:text-slate-900">Docs</a>

@@ -1,0 +1,6 @@
+{
+  "name": "Chronicle News Blog",
+  "description": "A modern news blog application with integrated RSS feed, built with React, Express, and Firebase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
