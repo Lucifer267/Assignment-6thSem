@@ -1,0 +1,6 @@
+{
+  "name": "Modern Real-Time Blog Comments",
+  "description": "A 21st.dev inspired real-time blog commenting system with AJAX polling and a polished minimal UI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

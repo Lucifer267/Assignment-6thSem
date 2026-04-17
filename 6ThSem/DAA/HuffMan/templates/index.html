@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huffman Coding Visualizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">Huffman</div>
+            <div class="nav-title">Data Compression Tool</div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Quick Start</h3>
+                <button onclick="useExample('hello world')" class="quick-btn">Hello World</button>
+                <button onclick="useExample('aaabbbccccdddd')" class="quick-btn">Repeated Chars</button>
+                <button onclick="useExample('The quick brown fox')" class="quick-btn">Sentence</button>
+                <button onclick="clearAll()" class="quick-btn danger">Clear All</button>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Information</h3>
+                <div class="info-box">
+                    <p><strong>Algorithm:</strong> Huffman Coding</p>
+                    <p><strong>Type:</strong> Lossless Compression</p>
+                    <p><strong>Best for:</strong> Repeated characters</p>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Input & Encode Section -->
+            <section class="card">
+                <div class="card-header">
+                    <h2>Input Text</h2>
+                </div>
+                <div class="card-body">
+                    <textarea id="inputText" class="input-textarea" placeholder="Enter text to compress..."></textarea>
+                    <div class="button-group">
+                        <button onclick="encode()" class="btn btn-encode">Encode & Analyze</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Two Column Layout -->
+            <div class="two-column">
+                <!-- Frequency Analysis -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2>Character Frequency</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="frequencyTable" class="table-container">
+                            <p class="empty-state">Enter text and click Encode to see analysis</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Huffman Codes -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2>Generated Codes</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="codesTable" class="table-container">
+                            <p class="empty-state">Codes will appear after encoding</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tree Visualization -->
+            <section class="card">
+                <div class="card-header">
+                    <h2>Huffman Tree Structure</h2>
+                </div>
+                <div class="card-body">
+                    <div class="tree-canvas-wrapper">
+                        <canvas id="treeCanvas"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Compression Statistics -->
+            <section class="card">
+                <div class="card-header">
+                    <h2>Compression Statistics</h2>
+                </div>
+                <div class="card-body">
+                    <div id="statsContainer" class="stats-grid">
+                        <p class="empty-state">Statistics will appear after encoding</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Encode/Decode Results -->
+            <div class="two-column">
+                <!-- Encoded Output -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2>Encoded Output</h2>
+                    </div>
+                    <div class="card-body">
+                        <textarea id="encodedText" class="output-textarea" placeholder="Binary string appears here..." readonly></textarea>
+                        <button onclick="copyToClipboard('encodedText')" class="btn btn-copy">Copy Code</button>
+                    </div>
+                </section>
+
+                <!-- Decode Input -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2>Decode Binary</h2>
+                    </div>
+                    <div class="card-body">
+                        <textarea id="binaryToDecode" class="input-textarea" placeholder="Paste binary code here..."></textarea>
+                        <button onclick="decode()" class="btn btn-decode">Decode</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Decoded Output -->
+            <section class="card">
+                <div class="card-header">
+                    <h2>Decoded Text</h2>
+                </div>
+                <div class="card-body">
+                    <textarea id="decodedText" class="output-textarea" placeholder="Original text appears here..." readonly></textarea>
+                    <button onclick="copyToClipboard('decodedText')" class="btn btn-copy">Copy Text</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Huffman Coding Visualizer. Built for understanding data compression algorithms.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

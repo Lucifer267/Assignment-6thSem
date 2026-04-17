@@ -85,6 +85,15 @@ const editors: User[] = [
   { id: "editor2", username: "editor", password: "editor123" }
 ];
 
+// Extend Express Request type to include user property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
+  }
+}
+
 // Middleware to verify JWT
 const verifyToken = (req: any, res: any, next: any) => {
   const token = req.headers.authorization?.split(" ")[1];
